@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as blueprints from '@aws-quickstart/eks-blueprints';
 import { KubernetesVersion } from 'aws-cdk-lib/aws-eks';
+import { ArgoCDAddOn } from '@aws-quickstart/eks-blueprints'; 
 
 // add environment props
 export interface ClusterConstructProps extends cdk.StackProps {
@@ -12,7 +13,7 @@ export interface ClusterConstructProps extends cdk.StackProps {
     hostedZoneName: string;
     repoUrl: string;
     credentialsSecretName: string;
-    credentialsType: string;
+    credentialsType: 'USERNAME' | 'TOKEN' | 'SSH';
     repoPath: string;
     targetRevision: string;
   };
@@ -33,32 +34,32 @@ export default class ClusterConstruct extends Construct {
     const targetRevision = props.env.targetRevision;
 
     const addOns: Array<blueprints.ClusterAddOn> = [
-      new blueprints.addons.ArgoCDAddOn({
-        bootstrapRepo: {
-          repoUrl: repoUrl || '',
-          credentialsSecretName: credentialsSecretName,
-          credentialsType: credentialsType as "USERNAME" | "TOKEN" | "SSH" | undefined,
-          path: repoPath,
-          targetRevision: targetRevision,
-
-        },
-      }),
-      new blueprints.addons.SecretsStoreAddOn(),
       new blueprints.addons.KarpenterAddOn({
         values: {
-          replicas: 1,
-        },
+          "replicas": 1,
+        }
       }),
       new blueprints.addons.ExternalDnsAddOn({
         hostedZoneResources: hostedZoneName? [hostedZoneName] : [],
       }),
-
+      new blueprints.addons.ExternalDnsAddOn({
+        hostedZoneResources: hostedZoneName ? [hostedZoneName] : [],
+      }),
+      new blueprints.addons.ArgoCDAddOn({
+        bootstrapRepo: {
+          repoUrl,
+          path: repoPath,
+          targetRevision,
+          credentialsSecretName,
+          credentialsType
+        },
+      }),
     ];
 
     const blueprint = blueprints.EksBlueprint.builder()
-    .version(KubernetesVersion.V1_31) // Use a valid Kubernetes version from the enum
     .account(account)
     .region(region)
+    .version(KubernetesVersion.V1_31) // Use a valid Kubernetes version from the enum
     .addOns(...addOns)
     .resourceProvider(hostedZoneName, new blueprints.LookupHostedZoneProvider(hostedZoneName))
     .build(scope, id+'-stack', props);

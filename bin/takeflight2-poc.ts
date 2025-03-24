@@ -9,14 +9,14 @@ const stagingEnv = {
     region: 'ap-southeast-2', 
     environment: 'staging',
     hostedZoneName: 'takeflight2.aligent.cloud',
-    repoUrl: '',
-    credentialsSecretName: '',
-    credentialsType: 'SSH',
-    repoPath: '',
+    repoUrl: 'git@bitbucket.org:aligent/takeflight2.git',
+    credentialsSecretName: 'tf2-argocd-access-token',
+    credentialsType: 'TOKEN' as const,
+    repoPath: '', //leave repoPath blank for now as it will be set later
     targetRevision: 'production'
 };
 
-stagingEnv.repoPath = `helm-repo/environments/${stagingEnv.environment}`;
+stagingEnv.repoPath = `helm-nextjs/environments/${stagingEnv.environment}`; //repoPath is set here
 
 const staging = new cdk.Stage(app, 'Staging', { env: stagingEnv })
 new ClusterConstruct(staging, 'Cluster', { env: stagingEnv });
