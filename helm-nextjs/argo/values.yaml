@@ -1,0 +1,19 @@
+namespace: argocd
+
+server:
+  serviceAccount:
+    create: false
+    name: argocd-blueprints-addon-argocd-server
+
+secretProvider:
+  name: blueprints-secret-inline
+  secretName: tf2-argocd-ssh-key
+
+application:
+  name: nextjs-staging
+  project: default
+  targetRevision: production
+  repoUrl: git@bitbucket.org:aligent/takeflight2.git
+  path: helm-nextjs/environments/staging/nextjs
+  destinationNamespace: nextjs-staging
+  server: https://kubernetes.default.svc
