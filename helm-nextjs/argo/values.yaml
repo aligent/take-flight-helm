@@ -6,7 +6,7 @@ server:
     name: argocd-blueprints-addon-argocd-server
 
 secretProvider:
-  name: blueprints-secret-inline
+  name: blueprints-secret
   secretName: tf2-argocd-ssh-key
 
 application:
