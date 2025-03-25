@@ -24,24 +24,26 @@ export default class ClusterConstruct extends Construct {
   constructor(scope: Construct, id: string, props: ClusterConstructProps) {
     super(scope, id);
 
-    const account = props.env.account;
-    const region = props.env.region;
-    const environment = props.env.environment;
-    const hostedZoneName = props.env.hostedZoneName;
-    const repoUrl = props.env.repoUrl;
-    const credentialsSecretName = props.env.credentialsSecretName;
+    const {
+      account,
+      region,
+      environment,
+      hostedZoneName,
+      repoUrl,
+      credentialsSecretName,
+      // credentialsType,
+      repoPath,
+      targetRevision,
+    } = props.env;
+
     const credentialsType = 'SSH';
-    const repoPath = props.env.repoPath;
-    const targetRevision = props.env.targetRevision;
 
     const addOns: Array<blueprints.ClusterAddOn> = [
+      new blueprints.addons.ExternalsSecretsAddOn(),
       new blueprints.addons.KarpenterAddOn({
         values: {
           replicas: 1,
         },
-      }),
-      new blueprints.addons.SecretsStoreAddOn({
-        syncSecrets: true,
       }),
       new blueprints.addons.ExternalDnsAddOn({
         name: `external-dns-${environment}`,
@@ -52,8 +54,6 @@ export default class ClusterConstruct extends Construct {
           repoUrl,
           path: repoPath,
           targetRevision,
-          credentialsSecretName,
-          credentialsType,
         },
       }),
     ];
@@ -66,23 +66,22 @@ export default class ClusterConstruct extends Construct {
     .resourceProvider(hostedZoneName, new blueprints.LookupHostedZoneProvider(hostedZoneName))
     .build(scope, id+'-stack', props);
 
-    // 👇 This gives you the ClusterInfo
-    const clusterInfo = blueprint.getClusterInfo();
+    // After cluster is built, manually add the IRSA for ESO
+    const cluster = blueprint.getClusterInfo().cluster;
 
-    // ✅ Now use it to add the IRSA-bound service account
-    const argoIRSA = clusterInfo.cluster.addServiceAccount('argo-irsa', {
-      name: 'argocd-blueprints-addon-argocd-server',
-      namespace: 'argocd',
+    const esoSA = cluster.addServiceAccount('ESOServiceAccount', {
+      name: 'external-secrets-sa',
+      namespace: 'external-secrets',
     });
 
-    argoIRSA.role.addToPrincipalPolicy(
+    esoSA.role.addToPrincipalPolicy(
       new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
         actions: ['secretsmanager:GetSecretValue'],
         resources: [
-          `arn:aws:secretsmanager:${region}:${account}:secret:tf2-argocd-ssh-key*`,
+          `arn:aws:secretsmanager:${region}:${account}:secret:${credentialsSecretName}*`,
         ],
-      }),
+        effect: iam.Effect.ALLOW,
+      })
     );
 
   }

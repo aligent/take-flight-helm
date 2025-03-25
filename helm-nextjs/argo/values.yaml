@@ -5,9 +5,12 @@ server:
     create: false
     name: argocd-blueprints-addon-argocd-server
 
-secretProvider:
-  name: blueprints-secret
-  secretName: tf2-argocd-ssh-key
+externalSecrets:
+  credentialsType: SSH # or USERNAME
+  repoUrl: git@bitbucket.org:aligent/takeflight2.git
+  secretName: argocd-repo-creds
+  awsSecretName: tf2-argocd-ssh-key
+  awsRegion: ap-southeast-2
 
 application:
   name: nextjs-staging
