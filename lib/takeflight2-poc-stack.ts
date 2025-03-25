@@ -70,7 +70,7 @@ export default class ClusterConstruct extends Construct {
     const cluster = blueprint.getClusterInfo().cluster;
 
     const esoSA = cluster.addServiceAccount('ESOServiceAccount', {
-      name: 'external-secrets-sa',
+      name: 'external-secrets-irsa-sa',
       namespace: 'external-secrets',
     });
 
