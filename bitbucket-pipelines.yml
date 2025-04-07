@@ -35,8 +35,8 @@ pipelines:
             - git commit -m "🔁 Auto-update image tag to $IMAGE_TAG from Bitbucket Pipeline"
             - git push origin HEAD:main  # Change to correct branch if needed
       
-      - step:
-          name: ArgoCD Sync Status
-          script:
-            - curl -s http://argocd-server.argocd.svc/api/v1/applications/nextjs | jq .
+      # - step: #PLACEHOLDER IN CASE WE WANT TO MAKE ARGO PUBLIC
+      #     name: ArgoCD Sync Status
+      #     script:
+      #       - curl -s http://argocd-server.argocd.svc/api/v1/applications/nextjs | jq . 
 
