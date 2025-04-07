@@ -1,28 +1,12 @@
 {
-  "name": "takeflight2-poc",
-  "version": "0.1.0",
-  "bin": {
-    "takeflight2-poc": "bin/takeflight2-poc.js"
-  },
+  "private": true,
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "test": "jest",
-    "cdk": "cdk"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.5.14",
-    "@types/node": "22.7.9",
-    "aws-cdk": "^2.173.4",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "~5.6.3"
+    "dev": "next dev",
+    "build": "next build"
   },
   "dependencies": {
-    "@aws-quickstart/eks-blueprints": "^1.16.3",
-    "@kubecost/kubecost-eks-blueprints-addon": "^0.1.8",
-    "aws-cdk-lib": "^2.173.4",
-    "constructs": "^10.0.0"
+    "next": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
