@@ -34,7 +34,8 @@ RUN \
   elif [ -f package-lock.json ]; then npm run build; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
   else echo "Lockfile not found." && exit 1; \
-  fi
+  fi && \
+  ls -la /app/.next && ls -la /app/.next/standalone
 
 # Production image, copy all the files and run next
 FROM base AS runner
