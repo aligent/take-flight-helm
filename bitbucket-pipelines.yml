@@ -1,0 +1,42 @@
+image: node:18
+
+pipelines:
+  branches:
+    staging:
+      - step:
+          name: Build and Push Docker Image
+          services:
+            - docker
+          caches:
+            - docker
+          script:
+            - export IMAGE_TAG=staging-$(date +%s)
+            - echo "🔨 Building image with tag $IMAGE_TAG"
+
+            # Build and push to Docker Hub using access token
+            - docker build -t aaronmedinaaligent/my-nextjs-app:$IMAGE_TAG .
+            - echo $DOCKERHUB_ACCESS_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
+            - docker push aaronmedinaaligent/my-nextjs-app:$IMAGE_TAG
+
+      - step:
+          name: Bump Image Tag in Helm Chart
+          script:
+            - export IMAGE_TAG=staging-$(date +%s)
+
+            # Clone GitHub repo using access token
+            - git config --global user.name "tf2-ci-bot"
+            - git config --global user.email "devops+tf2-ci@aligent.com.au"
+            - git clone https://x-access-token:$GITHUB_ACCESS_TOKEN@github.com/aaronmedina-dev/takeflight2-helm-github.git
+
+            - cd takeflight2-helm-github/nextjs
+            - sed -i "s|tag: .*|tag: \"$IMAGE_TAG\"|g" values.yaml
+
+            - git add values.yaml
+            - git commit -m "🔁 Auto-update image tag to $IMAGE_TAG from Bitbucket Pipeline"
+            - git push origin HEAD:main  # Change to correct branch if needed
+      
+      - step:
+          name: ArgoCD Sync Status
+          script:
+            - curl -s http://argocd-server.argocd.svc/api/v1/applications/nextjs | jq .
+
