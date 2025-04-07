@@ -1,7 +1,9 @@
-import type { NextConfig } from "next";
+// next.config.ts
 
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'standalone',
+  // other settings like experimental, reactStrictMode, etc.
 };
 
 export default nextConfig;
