@@ -3,4 +3,4 @@ spec:
     server: https://kubernetes.default.svc
   source:
     repoURL: 'git@github.com/aligent/take-flight-helm.git'
-    targetRevision: HEAD
+    targetRevision: main
