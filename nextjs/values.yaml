@@ -1,0 +1,23 @@
+replicaCount: 2
+
+image:
+  repository: "aaronmedinaaligent/my-nextjs-app"
+  tag: "staging-1744033822"
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+
+ingress:
+  enabled: true
+  hostname: "demo.takeflight2.aligent.cloud"

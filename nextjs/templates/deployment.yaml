@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextjs-demo
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: nextjs-demo
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: nextjs-demo
+  template:
+    metadata:
+      labels:
+        app: nextjs-demo
+    spec:
+      serviceAccountName: nextjs-serviceaccount
+      containers:
+        - name: nextjs-demo
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

@@ -1,0 +1,5 @@
+# This will ensure that helm creates the namespace if it doesn't exist yet
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Release.Namespace }}
