@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nextjs
+  name: nextjs-demo
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: nextjs
+    namespace: nextjs-demo
     server: {{ .Values.spec.destination.server }}
   project: default
   source:
-    path: nextjs
+    path: nextjs-demo
     repoURL: {{ .Values.spec.source.repoURL }} 
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
