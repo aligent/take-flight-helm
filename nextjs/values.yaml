@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: "aaronmedinaaligent/my-nextjs-app"
-  tag: "staging-1744033822"
+  tag: "staging-1744158280"
   pullPolicy: Always
 
 service:
