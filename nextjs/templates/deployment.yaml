@@ -31,15 +31,21 @@ spec:
             value: "http://demo.takeflight2.aligent.cloud"
           - name: "NODE_ENV"
             value: "production"
+          - name: "HOST"
+            value: "0.0.0.0"
           readinessProbe:
             httpGet:
               path: /
               port: {{ .Values.service.targetPort }}
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 10
+            failureThreshold: 10
+            timeoutSeconds: 2
           livenessProbe:
             httpGet:
               path: /
               port: {{ .Values.service.targetPort }}
-            initialDelaySeconds: 15
+            initialDelaySeconds: 30
             periodSeconds: 20
+            failureThreshold: 5
+            timeoutSeconds: 2
