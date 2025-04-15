@@ -1,5 +1,5 @@
 apiVersion: v2
-name: nextjs-demo
+name: nextjs
 description: A Helm chart for a containerized Next.js application
 
 type: application

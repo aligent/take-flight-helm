@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nextjs-demo
+  name: nextjs
   namespace: {{ .Release.Namespace }}
   labels:
-    app: nextjs-demo
+    app: nextjs
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: nextjs-demo
+      app: nextjs
   template:
     metadata:
       labels:
-        app: nextjs-demo
+        app: nextjs
     spec:
       serviceAccountName: nextjs-serviceaccount
       containers:
-        - name: nextjs-demo
+        - name: nextjs
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -29,3 +29,17 @@ spec:
             value: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
           - name: "NEXTAUTH_URL"
             value: "http://demo.takeflight2.aligent.cloud"
+          - name: "NODE_ENV"
+            value: "production"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
