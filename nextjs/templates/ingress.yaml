@@ -13,6 +13,30 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
+          - path: /_next/
+            pathType: Prefix
+            backend:
+              service:
+                name: nextjs
+                port:
+                  number: {{ .Values.service.port }}
+
+          - path: /static/
+            pathType: Prefix
+            backend:
+              service:
+                name: nextjs
+                port:
+                  number: {{ .Values.service.port }}
+
+          - path: /favicon.ico
+            pathType: Exact
+            backend:
+              service:
+                name: nextjs
+                port:
+                  number: {{ .Values.service.port }}
+
           - path: /
             pathType: Prefix
             backend:
