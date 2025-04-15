@@ -24,3 +24,6 @@ spec:
             - containerPort: {{ .Values.service.targetPort }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: "NEXTAUTH_SECRET"
+            value: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
