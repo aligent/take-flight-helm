@@ -4,7 +4,7 @@ metadata:
   name: argocd-server
   namespace: argocd
   annotations:
-    kubernetes.io/ingress.class: alb
+    # kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443},{"HTTP":80}]'
@@ -12,6 +12,7 @@ metadata:
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     external-dns.alpha.kubernetes.io/hostname: "argocd.takeflight2.aligent.cloud"
 spec:
+  ingressClassName: alb
   rules:
     - host: "argocd.takeflight2.aligent.cloud"
       http:
