@@ -1,0 +1,19 @@
+# apps/argocd-ingress/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-ui-ingress
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/aligent/take-flight-gitops.git
+    targetRevision: main
+    path: apps/argocd-ingress
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
