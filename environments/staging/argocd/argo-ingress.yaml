@@ -9,7 +9,7 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443},{"HTTP":80}]'
     alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/5b364a1e-e7a1-4602-b1da-1c5ab5175082"
-    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    # alb.ingress.kubernetes.io/ssl-redirect: "443"
     external-dns.alpha.kubernetes.io/hostname: "argocd.takeflight2.aligent.cloud"
 spec:
   ingressClassName: alb
