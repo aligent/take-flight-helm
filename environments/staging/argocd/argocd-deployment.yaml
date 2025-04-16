@@ -19,6 +19,7 @@ spec:
         app.kubernetes.io/name: argocd-server
         app.kubernetes.io/component: server
     spec:
+      serviceAccountName: argocd-argocd-server
       containers:
         - name: argocd-server
           image: quay.io/argoproj/argocd:v2.12.6 # ← use the version already running in your cluster
