@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/aligent/take-flight-helm.git
     targetRevision: main
-    path: environments/staging-argo
+    path: environments/staging/argocd
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
