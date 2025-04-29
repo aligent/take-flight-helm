@@ -1,4 +1,5 @@
 replicaCount: 2
+revisionHistoryLimit: 3
 
 image:
   repository: "aligent/takeflight2-nextjs-docker"
