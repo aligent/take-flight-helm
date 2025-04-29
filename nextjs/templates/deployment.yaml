@@ -27,6 +27,8 @@ spec:
           env:
           - name: "NEXTAUTH_SECRET"
             value: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
+          - name: "AUTH_SECRET"
+            value: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
           - name: "NEXTAUTH_URL"
             value: "http://demo.takeflight2.aligent.cloud"
           - name: "NODE_ENV"
