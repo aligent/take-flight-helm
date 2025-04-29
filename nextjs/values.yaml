@@ -1,8 +1,8 @@
 replicaCount: 2
 
 image:
-  # repository: "aligent/takeflight2-nextjs-docker"
-  repository: "aaronmedinaaligent/my-nextjs-app"
+  repository: "aligent/takeflight2-nextjs-docker"
+  # repository: "aaronmedinaaligent/my-nextjs-app"
   tag: "staging-1745883985"
   pullPolicy: Always
 
