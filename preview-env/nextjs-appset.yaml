@@ -12,7 +12,7 @@ spec:
           - path: nextjs/values-feature-*.yaml
   template:
     metadata:
-      name: 'preview-{{ path.basename | trimPrefix "values-feature-" | trimSuffix ".yaml" }}'
+      name: "{{ path.basename | replace \"values-feature-\" \"\" | replace \".yaml\" \"\" }}"
     spec:
       project: default
       source:
@@ -21,13 +21,13 @@ spec:
         path: nextjs
         helm:
           valueFiles:
-            - '{{ .path }}'
+            - "{{ path }}"
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{ path.basename | trimPrefix "values-" | trimSuffix ".yaml" }}'
-      syncPolicy:
-        syncOptions:
-          - CreateNamespace=true
-        automated:
-          prune: true
-          selfHeal: true
+        namespace: "{{ path.basename | replace \"values-\" \"\" | replace \".yaml\" \"\" }}"
+    syncPolicy:
+      syncOptions:
+        - CreateNamespace=true
+      automated:
+        prune: true
+        selfHeal: true
