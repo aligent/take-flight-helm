@@ -8,7 +8,7 @@ spec:
     - git:
         repoURL: https://github.com/aligent/take-flight-helm.git
         revision: main
-        directories:
+        files:
           - path: nextjs/values-feature-*.yaml
   template:
     metadata:
@@ -26,6 +26,8 @@ spec:
         server: https://kubernetes.default.svc
         namespace: 'feature-{{path.basename | regexReplaceAll "values-feature-(.*)\\.yaml" "${1}"}}'
       syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
         automated:
           prune: true
           selfHeal: true
