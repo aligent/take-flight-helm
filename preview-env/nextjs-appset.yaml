@@ -14,7 +14,7 @@ spec:
           - path: "nextjs/values-feature-*.yaml"
   template:
     metadata:
-      name: "nextjs-{{ path.basename }}"
+      name: "nextjs-{{ path.filename | replace '.yaml' ''}}"
     spec:
       project: default
       source:
@@ -24,10 +24,10 @@ spec:
         helm:
           valueFiles:
             - values.yaml
-            - values-{{ path.basename }}.yaml
+            - {{ path.filename }}
       destination:
         server: https://kubernetes.default.svc
-        namespace: nextjs-preview-{{ path.basename }}
+        namespace: "nextjs-preview-{{ path.filename | replace '.yaml' ''}}"
       syncPolicy:
         automated:
           prune: true
