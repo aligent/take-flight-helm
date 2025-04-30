@@ -12,7 +12,7 @@ spec:
           - path: nextjs/values-feature-*.yaml
   template:
     metadata:
-      name: 'nextjs-{{path.basename | regexReplaceAll "values-feature-(.*)\\.yaml" "${1}"}}'
+      name: '{{path.basename | replace "values-feature-" "" | replace ".yaml" "" | lower}}'
     spec:
       project: default
       source:
@@ -24,7 +24,7 @@ spec:
             - '{{path}}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: 'feature-{{path.basename | regexReplaceAll "values-feature-(.*)\\.yaml" "${1}"}}'
+        namespace: 'feature-{{path.basename | replace "values-feature-" "" | replace ".yaml" "" | lower}}'
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
