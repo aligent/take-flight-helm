@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nextjs-previews
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/aligent/take-flight-helm.git
+        revision: main
+        directories:
+          - path: nextjs/values-*.yaml
+  template:
+    metadata:
+      name: 'nextjs-{{path.basename | regexReplaceAll "values-(.*)\\.yaml" "${1}"}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/aligent/take-flight-helm.git
+        targetRevision: main
+        path: nextjs
+        helm:
+          valueFiles:
+            - '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'feature-{{path.basename | regexReplaceAll "values-(.*)\\.yaml" "${1}"}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
