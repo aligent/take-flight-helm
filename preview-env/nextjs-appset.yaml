@@ -22,7 +22,7 @@ spec:
         helm:
           valueFiles:
             - values.yaml
-            - "{{ path.path }}"
+            - "nextjs/preview/{{ path.basename }}/values.yaml"
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{ image.tag }}"
