@@ -6,26 +6,26 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: git@github.com:aligent/take-flight-helm.git
-        revision: main
+        repoURL: https://github.com/aligent/take-flight-helm.git
+        revision: HEAD
         files:
-          - path: "nextjs/values-feature-*.yaml"
+          - path: "nextjs/preview/**/values.yaml"
   template:
     metadata:
-      name: "nextjs-{{ path.filenameNormalize }}"
+      name: "nextjs-{{ image.tag }}"
     spec:
       project: default
       source:
-        repoURL: git@github.com:aligent/take-flight-helm.git
+        repoURL: https://github.com/aligent/take-flight-helm.git
         targetRevision: main
         path: nextjs
         helm:
-          valueFiles:
-            - values.yaml
-            - "{{ path.filename }}"
+          parameters:
+          - name: "namespace"
+            value: "{{ image.tag }}"
       destination:
         server: https://kubernetes.default.svc
-        namespace: "nextjs-preview-{{ path.filename | replace '.yaml' ''}}"
+        namespace: "{{ image.tag }}"
       syncPolicy:
         automated:
           prune: true
