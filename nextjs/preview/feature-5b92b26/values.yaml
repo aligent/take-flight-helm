@@ -23,5 +23,4 @@ resources:
 ingress:
   enabled: true
   hostname: "feature-5b92b26.takeflight2.aligent.cloud"
-  certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/171401ce-1512-40ab-a624-8ad557849a64"
-
+  certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/30f1ca2f-35f4-44bb-919a-d902569eb0f5"
