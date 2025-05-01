@@ -27,15 +27,15 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
           - name: "NEXTAUTH_SECRET"
-            value: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
+            value: {{ .Values.env.NEXTAUTH_SECRET | quote }}
           - name: "AUTH_SECRET"
-            value: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
+            value: {{ .Values.env.AUTH_SECRET | quote }}
           - name: "NEXTAUTH_URL"
-            value: "http://demo.takeflight2.aligent.cloud"
+            value: {{ .Values.env.NEXTAUTH_URL | quote }}
           - name: "NODE_ENV"
-            value: "production"
+            value: {{ .Values.env.NODE_ENV | quote }}
           - name: "HOST"
-            value: "0.0.0.0"
+            value: {{ .Values.env.HOST | quote }}
           # readinessProbe:
           #   httpGet:
           #     path: /

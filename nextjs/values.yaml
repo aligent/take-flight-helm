@@ -25,3 +25,11 @@ ingress:
   hostname: "demo.takeflight2.aligent.cloud"
   certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/171401ce-1512-40ab-a624-8ad557849a64"
 
+env:
+  NEXTAUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
+  AUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
+  NEXTAUTH_URL: "http://demo.takeflight2.aligent.cloud"
+  NODE_ENV: "production"
+  HOST: "0.0.0.0"
+
+
