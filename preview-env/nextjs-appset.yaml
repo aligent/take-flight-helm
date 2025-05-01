@@ -6,7 +6,7 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: https://github.com/aligent/take-flight-helm.git
+        repoURL: git@github.com:aligent/take-flight-helm.git
         revision: main
         files:
           - path: "nextjs/values-feature-*.yaml"
@@ -16,7 +16,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/aligent/take-flight-helm.git
+        repoURL: git@github.com:aligent/take-flight-helm.git
         targetRevision: main
         path: nextjs
         helm:
