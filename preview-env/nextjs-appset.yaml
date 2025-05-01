@@ -20,10 +20,9 @@ spec:
         targetRevision: main
         path: nextjs
         helm:
-          valuesFile: "{{ path.path }}"
-          parameters:
-          - name: "namespace"
-            value: "{{ image.tag }}"
+          valueFiles:
+            - values.yaml
+            - "{{ path.path }}"
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{ image.tag }}"
