@@ -23,6 +23,8 @@ spec:
           parameters:
           - name: "namespace"
             value: "{{ image.tag }}"
+          - name: "valuesFile"
+            value: "{{ path.path }}"
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{ image.tag }}"
