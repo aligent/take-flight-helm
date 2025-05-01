@@ -12,7 +12,7 @@ spec:
           - path: "nextjs/values-feature-*.yaml"
   template:
     metadata:
-      name: "nextjs-{{ path.filename | replace '.yaml' ''}}"
+      name: "nextjs-{{ path.filenameNormalize }}"
     spec:
       project: default
       source:
