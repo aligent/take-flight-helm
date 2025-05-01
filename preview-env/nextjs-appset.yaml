@@ -8,8 +8,6 @@ spec:
     - git:
         repoURL: https://github.com/aligent/take-flight-helm.git
         revision: main
-        directories:
-          - path: "nextjs"
         files:
           - path: "nextjs/values-feature-*.yaml"
   template:
