@@ -3,7 +3,7 @@ revisionHistoryLimit: 0
 
 image:
   repository: "aligent/takeflight2-nextjs-docker"
-  tag: "store-bigcommerce-42f1e7a"
+  tag: "store-bigcommerce-6a74631"
   pullPolicy: Always
 
 service:
