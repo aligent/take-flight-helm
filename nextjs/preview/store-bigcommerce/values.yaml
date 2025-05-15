@@ -3,7 +3,7 @@ revisionHistoryLimit: 0
 
 image:
   repository: "aligent/takeflight2-nextjs-docker"
-  tag: "store-adobecommerce-09c1b2b"
+  tag: "store-bigcommerce-09c1b2b"
   pullPolicy: Always
 
 service:
@@ -21,7 +21,7 @@ resources:
 
 ingress:
   enabled: true
-  hostname: "store-adobecommerce.takeflight2.aligent.cloud"
+  hostname: "store-bigcommerce.takeflight2.aligent.cloud"
   certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/30f1ca2f-35f4-44bb-919a-d902569eb0f5"
 
 env:
