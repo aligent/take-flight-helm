@@ -12,7 +12,7 @@ spec:
           - path: "nextjs/preview/**/values.yaml"
   template:
     metadata:
-      name: "nextjs-{{ image.tag }}"
+      name: "nextjs-{{ path.basename }}"
     spec:
       project: default
       source:
@@ -25,7 +25,7 @@ spec:
             - "preview/{{ path.basename }}/values.yaml"
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{ image.tag }}"
+        namespace: "{{ path.basename }}"
       syncPolicy:
         automated:
           prune: true
