@@ -4,7 +4,7 @@ revisionHistoryLimit: 2
 image:
   repository: "aligent/takeflight2-nextjs-docker"
   # repository: "aaronmedinaaligent/my-nextjs-app"
-  tag: "0dc9f3f"
+  tag: "2c7cdf5"
   pullPolicy: Always
 
 service:
