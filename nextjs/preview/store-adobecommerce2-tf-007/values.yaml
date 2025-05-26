@@ -3,7 +3,7 @@ revisionHistoryLimit: 0
 
 image:
   repository: "aligent/takeflight2-nextjs-docker"
-  tag: "store-adobecommerce-c9d3c8c"
+  tag: "store-adobecommerce2-c9d3c8c"
   pullPolicy: Always
 
 service:
@@ -21,12 +21,12 @@ resources:
 
 ingress:
   enabled: true
-  hostname: "store-adobecommerce-tf-007.takeflight2.aligent.cloud"
+  hostname: "store-adobecommerce2-tf-007.takeflight2.aligent.cloud"
   certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/30f1ca2f-35f4-44bb-919a-d902569eb0f5"
 
 env:
   NEXTAUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
   AUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
-  NEXTAUTH_URL: "https://store-adobecommerce-tf-007.takeflight2.aligent.cloud"
+  NEXTAUTH_URL: "https://store-adobecommerce2-tf-007.takeflight2.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
