@@ -1,0 +1,32 @@
+replicaCount: 1
+revisionHistoryLimit: 0
+
+image:
+  repository: "aligent/takeflight2-nextjs-docker"
+  tag: "store-bigcommerce-d5fbdf0"
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+
+ingress:
+  enabled: true
+  hostname: "store-bigcommerce-tf2-597.takeflight2.aligent.cloud"
+  certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/30f1ca2f-35f4-44bb-919a-d902569eb0f5"
+
+env:
+  NEXTAUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
+  AUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
+  NEXTAUTH_URL: "https://store-bigcommerce-tf2-597.takeflight2.aligent.cloud"
+  NODE_ENV: "production"
+  HOST: "0.0.0.0"
