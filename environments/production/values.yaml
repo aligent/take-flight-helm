@@ -1,5 +1,4 @@
 # Production environment values for take-flight-helm
-# Override specific values for production deployment
 
 replicaCount: 3
 revisionHistoryLimit: 5

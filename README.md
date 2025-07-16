@@ -12,10 +12,8 @@ Kubernetes deployment configurations for the Take Flight e-commerce platform usi
 │   ├── templates/         # Kubernetes resource templates
 │   └── preview/           # Preview environment configurations
 ├── environments/          # Environment-specific configurations
-│   ├── staging/          # Staging environment
 │   └── production/       # Production environment
-├── preview-env/          # ArgoCD ApplicationSet for preview environments
-└── archive/              # Historical configurations (documented)
+└── preview-env/          # ArgoCD ApplicationSet for preview environments
 ```
 
 ## Quick Start
@@ -74,9 +72,6 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 - **Resources**: 500m-1000m CPU, 512Mi-1024Mi memory
 - **Secrets**: Kubernetes secrets enabled
 
-### Staging
-- **Deployment**: Managed by ArgoCD from main branch
-- **Configuration**: See `environments/staging/`
 
 ### Preview Environments
 - **Auto-generated**: Based on values files in `nextjs/preview/`
@@ -87,8 +82,7 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 
 1. **Feature Development**: Work on feature branches
 2. **Preview**: Update values in `nextjs/preview/` for testing
-3. **Staging**: Merge to main triggers ArgoCD sync to staging
-4. **Production**: Manual deployment using production values
+3. **Production**: Merge to main triggers ArgoCD sync to production
 
 ## Troubleshooting
 
