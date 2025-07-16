@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nextjs-production
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: nextjs
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: apps/nextjs
+    repoURL: https://github.com/aligent/take-flight-helm.git
+    targetRevision: main
+    helm:
+      valueFiles:
+        - values.yaml
+        - ../../environments/production/values.yaml
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

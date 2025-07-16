@@ -6,14 +6,20 @@ Kubernetes deployment configurations for the Take Flight e-commerce platform usi
 
 ```
 .
-├── nextjs/                 # Main Helm chart for Next.js applications
-│   ├── Chart.yaml         # Chart metadata
-│   ├── values.yaml        # Default values
-│   ├── templates/         # Kubernetes resource templates
-│   └── preview/           # Preview environment configurations
-├── environments/          # Environment-specific configurations
-│   └── production/       # Production environment
-└── preview-env/          # ArgoCD ApplicationSet for preview environments
+├── apps/
+│   └── nextjs/            # Main Helm chart for Next.js applications
+│       ├── Chart.yaml     # Chart metadata
+│       ├── values.yaml    # Default values
+│       ├── templates/     # Kubernetes resource templates
+│       └── preview/       # Preview environment configurations
+├── argocd/                # ArgoCD configurations
+│   ├── applicationsets/   # ApplicationSets for automated deployments
+│   │   └── nextjs-appset.yaml  # Preview environment automation
+│   └── applications/      # ArgoCD Application definitions
+│       └── nextjs-production.yaml  # Production deployment
+└── environments/          # Environment-specific value overrides
+    └── production/        # Production values
+        └── values.yaml
 ```
 
 ## Quick Start
@@ -22,20 +28,20 @@ Kubernetes deployment configurations for the Take Flight e-commerce platform usi
 
 ```bash
 # Install with default values
-helm upgrade --install nextjs ./nextjs
+helm upgrade --install nextjs ./apps/nextjs
 
 # Install with environment-specific values
-helm upgrade --install nextjs ./nextjs -f environments/production/values.yaml
+helm upgrade --install nextjs ./apps/nextjs -f environments/production/values.yaml
 
 # Install with preview environment values
-helm upgrade --install nextjs ./nextjs -f nextjs/preview/store-bigcommerce/values.yaml
+helm upgrade --install nextjs ./apps/nextjs -f apps/nextjs/preview/store-bigcommerce/values.yaml
 ```
 
 ### Development Workflow
 
-1. **Validate charts**: `helm lint nextjs/`
-2. **Test templates**: `helm template nextjs ./nextjs -f nextjs/values.yaml`
-3. **Dry run**: `helm template nextjs ./nextjs | kubectl apply --dry-run=client -f -`
+1. **Validate charts**: `helm lint apps/nextjs/`
+2. **Test templates**: `helm template nextjs ./apps/nextjs -f apps/nextjs/values.yaml`
+3. **Dry run**: `helm template nextjs ./apps/nextjs | kubectl apply --dry-run=client -f -`
 
 ## Security Guidelines
 
@@ -74,15 +80,21 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 
 
 ### Preview Environments
-- **Auto-generated**: Based on values files in `nextjs/preview/`
+- **Auto-generated**: Based on values files in `apps/nextjs/preview/`
 - **Stores**: Adobe Commerce, BigCommerce
-- **Management**: ArgoCD ApplicationSet
+- **Management**: ArgoCD ApplicationSet in `argocd/applicationsets/`
 
 ## GitOps Workflow
 
 1. **Feature Development**: Work on feature branches
-2. **Preview**: Update values in `nextjs/preview/` for testing
-3. **Production**: Merge to main triggers ArgoCD sync to production
+2. **Preview**: Update values in `apps/nextjs/preview/` for testing
+3. **Production**: Merge to main triggers ArgoCD sync to production via `argocd/applications/nextjs-production.yaml`
+
+## ArgoCD Structure
+
+- **Applications**: Defined in `argocd/applications/` for explicit deployments
+- **ApplicationSets**: Defined in `argocd/applicationsets/` for automated preview environments
+- **Environment Values**: Override values stored in `environments/` directory
 
 ## Troubleshooting
 
@@ -108,6 +120,6 @@ readinessProbe:
 ## Contributing
 
 1. Create feature branch: `feature/TF2-XXX_description`
-2. Test changes with `helm lint` and `helm template`
-3. Update relevant environment values
+2. Test changes with `helm lint apps/nextjs/` and `helm template`
+3. Update relevant environment values in `environments/` or preview values in `apps/nextjs/preview/`
 4. Commit with ticket reference: `TF2-XXX: Description`
