@@ -1,10 +1,9 @@
-replicaCount: 2
-revisionHistoryLimit: 2
+replicaCount: 3
+revisionHistoryLimit: 5
 
 image:
   repository: "aligent/takeflight2-nextjs-docker"
-  # repository: "aaronmedinaaligent/my-nextjs-app"
-  tag: "ad992f3"
+  tag: "production-stable"
   pullPolicy: Always
 
 service:
@@ -14,15 +13,15 @@ service:
 
 resources:
   limits:
+    cpu: "1000m"
+    memory: "1024Mi"
+  requests:
     cpu: "500m"
     memory: "512Mi"
-  requests:
-    cpu: "250m"
-    memory: "256Mi"
 
 ingress:
   enabled: true
-  hostname: "demo.takeflight2.aligent.cloud"
+  hostname: "takeflight.aligent.com"
   certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/171401ce-1512-40ab-a624-8ad557849a64"
 
 certificates:
@@ -30,15 +29,13 @@ certificates:
   preview: "arn:aws:acm:ap-southeast-2:182399723872:certificate/30f1ca2f-35f4-44bb-919a-d902569eb0f5"
 
 secrets:
-  create: false
+  create: true
   name: "nextjs-secrets"
-  # nextAuthSecret: "your-secure-secret-here"
-  # authSecret: "your-secure-secret-here"
 
 env:
   NEXTAUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
   AUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
-  NEXTAUTH_URL: "http://demo.takeflight2.aligent.cloud"
+  NEXTAUTH_URL: "https://takeflight.aligent.com"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
 

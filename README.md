@@ -9,17 +9,14 @@ Kubernetes deployment configurations for the Take Flight e-commerce platform usi
 ├── apps/
 │   └── nextjs/            # Main Helm chart for Next.js applications
 │       ├── Chart.yaml     # Chart metadata
-│       ├── values.yaml    # Default values
+│       ├── values.yaml    # Production values
 │       ├── templates/     # Kubernetes resource templates
 │       └── preview/       # Preview environment configurations
-├── argocd/                # ArgoCD configurations
-│   ├── applicationsets/   # ApplicationSets for automated deployments
-│   │   └── nextjs-appset.yaml  # Preview environment automation
-│   └── applications/      # ArgoCD Application definitions
-│       └── nextjs-production.yaml  # Production deployment
-└── environments/          # Environment-specific value overrides
-    └── production/        # Production values
-        └── values.yaml
+└── argocd/                # ArgoCD configurations
+    ├── applicationsets/   # ApplicationSets for automated deployments
+    │   └── nextjs-appset.yaml  # Preview environment automation
+    └── applications/      # ArgoCD Application definitions
+        └── nextjs-production.yaml  # Production deployment
 ```
 
 ## Quick Start
@@ -27,11 +24,8 @@ Kubernetes deployment configurations for the Take Flight e-commerce platform usi
 ### Deploying to Local Cluster
 
 ```bash
-# Install with default values
+# Install with production values (default)
 helm upgrade --install nextjs ./apps/nextjs
-
-# Install with environment-specific values
-helm upgrade --install nextjs ./apps/nextjs -f environments/production/values.yaml
 
 # Install with preview environment values
 helm upgrade --install nextjs ./apps/nextjs -f apps/nextjs/preview/store-bigcommerce/values.yaml
@@ -72,12 +66,12 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 
 ## Environment Configuration
 
-### Production
+### Production (Default)
 - **Hostname**: `takeflight.aligent.com`
 - **Replicas**: 3
 - **Resources**: 500m-1000m CPU, 512Mi-1024Mi memory
 - **Secrets**: Kubernetes secrets enabled
-
+- **Values**: Configured directly in `apps/nextjs/values.yaml`
 
 ### Preview Environments
 - **Auto-generated**: Based on values files in `apps/nextjs/preview/`
@@ -92,9 +86,9 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 
 ## ArgoCD Structure
 
-- **Applications**: Defined in `argocd/applications/` for explicit deployments
+- **Applications**: Defined in `argocd/applications/` for production deployment
 - **ApplicationSets**: Defined in `argocd/applicationsets/` for automated preview environments
-- **Environment Values**: Override values stored in `environments/` directory
+- **Single Environment**: Production values are the default in `apps/nextjs/values.yaml`
 
 ## Troubleshooting
 
@@ -121,5 +115,5 @@ readinessProbe:
 
 1. Create feature branch: `feature/TF2-XXX_description`
 2. Test changes with `helm lint apps/nextjs/` and `helm template`
-3. Update relevant environment values in `environments/` or preview values in `apps/nextjs/preview/`
+3. Update production values in `apps/nextjs/values.yaml` or preview values in `apps/nextjs/preview/`
 4. Commit with ticket reference: `TF2-XXX: Description`
