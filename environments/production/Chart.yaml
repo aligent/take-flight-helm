@@ -1,6 +1,6 @@
 apiVersion: v2
-name: nextjs-staging
-description: Next.js staging environment deployment
+name: nextjs-production
+description: Next.js production environment deployment
 
 # A chart can be either an 'application' or a 'library' chart.
 #

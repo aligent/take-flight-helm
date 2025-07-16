@@ -1,0 +1,34 @@
+# Production environment values for take-flight-helm
+# Override specific values for production deployment
+
+replicaCount: 3
+revisionHistoryLimit: 5
+
+image:
+  repository: "aligent/takeflight2-nextjs-docker"
+  tag: "production-stable"
+  pullPolicy: Always
+
+resources:
+  limits:
+    cpu: "1000m"
+    memory: "1024Mi"
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+
+ingress:
+  enabled: true
+  hostname: "takeflight.aligent.com"
+  certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/171401ce-1512-40ab-a624-8ad557849a64"
+
+secrets:
+  create: true
+  name: "nextjs-secrets"
+
+env:
+  NEXTAUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
+  AUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
+  NEXTAUTH_URL: "https://takeflight.aligent.com"
+  NODE_ENV: "production"
+  HOST: "0.0.0.0"
