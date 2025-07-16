@@ -80,15 +80,34 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 
 ## GitOps Workflow
 
+### Prerequisites
+- ArgoCD installed and configured (via AWS EKS Blueprints)
+- ArgoCD has read access to this repository
+- Application definitions applied to ArgoCD cluster
+
+### Deployment Flow
 1. **Feature Development**: Work on feature branches
 2. **Preview**: Update values in `apps/takeflight/preview/` for testing
+   - ArgoCD ApplicationSet automatically creates preview applications
 3. **Production**: Merge to main triggers ArgoCD sync to production via `argocd/applications/takeflight-production.yaml`
 
-## ArgoCD Structure
+## ArgoCD Integration
+
+### Prerequisites
+- **ArgoCD Installation**: ArgoCD must be installed in your EKS cluster (typically via AWS EKS Blueprints or other infrastructure-as-code)
+- **Repository Access**: ArgoCD needs read access to this repository
+
+### Application Definitions
+This repository contains ArgoCD application definitions (not ArgoCD installation files):
 
 - **Applications**: Defined in `argocd/applications/` for production deployment
-- **ApplicationSets**: Defined in `argocd/applicationsets/` for automated preview environments
-- **Single Environment**: Production values are the default in `apps/takeflight/values.yaml`
+- **ApplicationSets**: Defined in `argocd/applicationsets/` for automated preview environments  
+- **Purpose**: These files tell ArgoCD **what** to deploy, not **how** to install ArgoCD itself
+
+### Architecture
+- **Infrastructure Layer**: ArgoCD platform installed via AWS EKS Blueprints (separate repository)
+- **Application Layer**: This repository defines applications for ArgoCD to manage
+- **GitOps Pattern**: ArgoCD reads these definitions and automatically deploys/syncs applications
 
 ## Troubleshooting
 
@@ -97,6 +116,8 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 - **Hardcoded secrets**: Use placeholders, enable Kubernetes secrets
 - **Certificate errors**: Verify correct ARN for environment
 - **Template errors**: Run `helm lint` and `helm template` before commit
+- **ArgoCD not deploying**: Ensure ArgoCD is installed and has access to this repository
+- **Application not syncing**: Check ArgoCD UI for sync status and errors
 
 ### Health Checks
 
