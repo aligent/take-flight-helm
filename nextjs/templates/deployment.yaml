@@ -27,9 +27,23 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
           - name: "NEXTAUTH_SECRET"
+            {{- if .Values.secrets.create }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.name | default "nextjs-secrets" }}
+                key: NEXTAUTH_SECRET
+            {{- else }}
             value: {{ .Values.env.NEXTAUTH_SECRET | quote }}
+            {{- end }}
           - name: "AUTH_SECRET"
+            {{- if .Values.secrets.create }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.name | default "nextjs-secrets" }}
+                key: AUTH_SECRET
+            {{- else }}
             value: {{ .Values.env.AUTH_SECRET | quote }}
+            {{- end }}
           - name: "NEXTAUTH_URL"
             value: {{ .Values.env.NEXTAUTH_URL | quote }}
           - name: "NODE_ENV"

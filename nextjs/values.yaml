@@ -25,6 +25,12 @@ ingress:
   hostname: "demo.takeflight2.aligent.cloud"
   certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/171401ce-1512-40ab-a624-8ad557849a64"
 
+secrets:
+  create: false
+  name: "nextjs-secrets"
+  # nextAuthSecret: "your-secure-secret-here"
+  # authSecret: "your-secure-secret-here"
+
 env:
   NEXTAUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
   AUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
