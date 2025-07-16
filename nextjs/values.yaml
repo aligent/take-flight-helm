@@ -26,8 +26,8 @@ ingress:
   certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/171401ce-1512-40ab-a624-8ad557849a64"
 
 env:
-  NEXTAUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
-  AUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
+  NEXTAUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
+  AUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
   NEXTAUTH_URL: "http://demo.takeflight2.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"

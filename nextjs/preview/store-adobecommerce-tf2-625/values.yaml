@@ -25,8 +25,8 @@ ingress:
   certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/30f1ca2f-35f4-44bb-919a-d902569eb0f5"
 
 env:
-  NEXTAUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
-  AUTH_SECRET: "askldhsaksahksadfhdslkfhdskfhsdkfhkdshfksahkda"
+  NEXTAUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
+  AUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
   NEXTAUTH_URL: "https://store-adobecommerce-tf2-625.takeflight2.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
