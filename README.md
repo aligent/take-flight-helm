@@ -7,16 +7,16 @@ Kubernetes deployment configurations for the Take Flight e-commerce platform usi
 ```
 .
 ├── apps/
-│   └── nextjs/            # Main Helm chart for Next.js applications
+│   └── takeflight/        # Main Helm chart for Take Flight applications
 │       ├── Chart.yaml     # Chart metadata
 │       ├── values.yaml    # Production values
 │       ├── templates/     # Kubernetes resource templates
 │       └── preview/       # Preview environment configurations
 └── argocd/                # ArgoCD configurations
     ├── applicationsets/   # ApplicationSets for automated deployments
-    │   └── nextjs-appset.yaml  # Preview environment automation
+    │   └── takeflight-appset.yaml  # Preview environment automation
     └── applications/      # ArgoCD Application definitions
-        └── nextjs-production.yaml  # Production deployment
+        └── takeflight-production.yaml  # Production deployment
 ```
 
 ## Quick Start
@@ -25,17 +25,17 @@ Kubernetes deployment configurations for the Take Flight e-commerce platform usi
 
 ```bash
 # Install with production values (default)
-helm upgrade --install nextjs ./apps/nextjs
+helm upgrade --install takeflight ./apps/takeflight
 
 # Install with preview environment values
-helm upgrade --install nextjs ./apps/nextjs -f apps/nextjs/preview/store-bigcommerce/values.yaml
+helm upgrade --install takeflight ./apps/takeflight -f apps/takeflight/preview/store-bigcommerce/values.yaml
 ```
 
 ### Development Workflow
 
-1. **Validate charts**: `helm lint apps/nextjs/`
-2. **Test templates**: `helm template nextjs ./apps/nextjs -f apps/nextjs/values.yaml`
-3. **Dry run**: `helm template nextjs ./apps/nextjs | kubectl apply --dry-run=client -f -`
+1. **Validate charts**: `helm lint apps/takeflight/`
+2. **Test templates**: `helm template takeflight ./apps/takeflight -f apps/takeflight/values.yaml`
+3. **Dry run**: `helm template takeflight ./apps/takeflight | kubectl apply --dry-run=client -f -`
 
 ## Security Guidelines
 
@@ -52,7 +52,7 @@ Enable secret management by setting `secrets.create: true` in values files:
 ```yaml
 secrets:
   create: true
-  name: "nextjs-secrets"
+  name: "takeflight-secrets"
   nextAuthSecret: "your-actual-secret"
   authSecret: "your-actual-secret"
 ```
@@ -71,24 +71,24 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 - **Replicas**: 3
 - **Resources**: 500m-1000m CPU, 512Mi-1024Mi memory
 - **Secrets**: Kubernetes secrets enabled
-- **Values**: Configured directly in `apps/nextjs/values.yaml`
+- **Values**: Configured directly in `apps/takeflight/values.yaml`
 
 ### Preview Environments
-- **Auto-generated**: Based on values files in `apps/nextjs/preview/`
+- **Auto-generated**: Based on values files in `apps/takeflight/preview/`
 - **Stores**: Adobe Commerce, BigCommerce
 - **Management**: ArgoCD ApplicationSet in `argocd/applicationsets/`
 
 ## GitOps Workflow
 
 1. **Feature Development**: Work on feature branches
-2. **Preview**: Update values in `apps/nextjs/preview/` for testing
-3. **Production**: Merge to main triggers ArgoCD sync to production via `argocd/applications/nextjs-production.yaml`
+2. **Preview**: Update values in `apps/takeflight/preview/` for testing
+3. **Production**: Merge to main triggers ArgoCD sync to production via `argocd/applications/takeflight-production.yaml`
 
 ## ArgoCD Structure
 
 - **Applications**: Defined in `argocd/applications/` for production deployment
 - **ApplicationSets**: Defined in `argocd/applicationsets/` for automated preview environments
-- **Single Environment**: Production values are the default in `apps/nextjs/values.yaml`
+- **Single Environment**: Production values are the default in `apps/takeflight/values.yaml`
 
 ## Troubleshooting
 
@@ -114,6 +114,6 @@ readinessProbe:
 ## Contributing
 
 1. Create feature branch: `feature/TF2-XXX_description`
-2. Test changes with `helm lint apps/nextjs/` and `helm template`
-3. Update production values in `apps/nextjs/values.yaml` or preview values in `apps/nextjs/preview/`
+2. Test changes with `helm lint apps/takeflight/` and `helm template`
+3. Update production values in `apps/takeflight/values.yaml` or preview values in `apps/takeflight/preview/`
 4. Commit with ticket reference: `TF2-XXX: Description`

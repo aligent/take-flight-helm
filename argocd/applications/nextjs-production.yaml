@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nextjs-production
+  name: takeflight-production
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: nextjs
+    namespace: takeflight
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: apps/nextjs
+    path: apps/takeflight
     repoURL: https://github.com/aligent/take-flight-helm.git
     targetRevision: main
     helm:

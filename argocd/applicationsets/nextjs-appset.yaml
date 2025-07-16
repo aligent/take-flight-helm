@@ -9,16 +9,16 @@ spec:
         repoURL: https://github.com/aligent/take-flight-helm.git
         revision: HEAD
         files:
-          - path: "apps/nextjs/preview/**/values.yaml"
+          - path: "apps/takeflight/preview/**/values.yaml"
   template:
     metadata:
-      name: "nextjs-{{ path.basename }}"
+      name: "takeflight-{{ path.basename }}"
     spec:
       project: default
       source:
         repoURL: https://github.com/aligent/take-flight-helm.git
         targetRevision: main
-        path: apps/nextjs
+        path: apps/takeflight
         helm:
           valueFiles:
             - values.yaml

@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nextjs
+  name: takeflight
   namespace: {{ .Release.Namespace }}
   labels:
-    app: nextjs
+    app: takeflight
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app: nextjs
+      app: takeflight
   template:
     metadata:
       labels:
-        app: nextjs
+        app: takeflight
     spec:
-      serviceAccountName: nextjs-serviceaccount
+      serviceAccountName: takeflight-serviceaccount
       containers:
-        - name: nextjs
+        - name: takeflight
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -30,7 +30,7 @@ spec:
             {{- if .Values.secrets.create }}
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.secrets.name | default "nextjs-secrets" }}
+                name: {{ .Values.secrets.name | default "takeflight-secrets" }}
                 key: NEXTAUTH_SECRET
             {{- else }}
             value: {{ .Values.env.NEXTAUTH_SECRET | quote }}
@@ -39,7 +39,7 @@ spec:
             {{- if .Values.secrets.create }}
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.secrets.name | default "nextjs-secrets" }}
+                name: {{ .Values.secrets.name | default "takeflight-secrets" }}
                 key: AUTH_SECRET
             {{- else }}
             value: {{ .Values.env.AUTH_SECRET | quote }}

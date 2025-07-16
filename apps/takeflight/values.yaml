@@ -30,7 +30,7 @@ certificates:
 
 secrets:
   create: true
-  name: "nextjs-secrets"
+  name: "takeflight-secrets"
 
 env:
   NEXTAUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
