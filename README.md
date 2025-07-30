@@ -7,16 +7,21 @@ Kubernetes deployment configurations for the Take Flight e-commerce platform usi
 ```
 .
 ├── apps/
-│   └── takeflight/        # Main Helm chart for Take Flight applications
-│       ├── Chart.yaml     # Chart metadata
-│       ├── values.yaml    # Production values
-│       ├── templates/     # Kubernetes resource templates
-│       └── preview/       # Preview environment configurations
-└── argocd/                # ArgoCD configurations
-    ├── applicationsets/   # ApplicationSets for automated deployments
-    │   └── takeflight-appset.yaml  # Preview environment automation
-    └── applications/      # ArgoCD Application definitions
-        └── takeflight-production.yaml  # Production deployment
+│   └── takeflight/           # Main Helm chart for Take Flight applications
+│       ├── Chart.yaml        # Chart metadata
+│       ├── values.yaml       # Default values for production
+│       ├── templates/        # Kubernetes resource templates
+│       │   ├── deployment.yaml
+│       │   ├── ingress.yaml
+│       │   ├── namespace.yaml
+│       │   ├── secret-provider.yaml
+│       │   ├── service.yaml
+│       │   └── serviceaccount.yaml
+│       └── preview/          # Preview environment configurations (dynamically managed)
+│           └── values-template.yaml      # Template for new preview environments
+├── environments/             # Environment-specific ArgoCD applications (if present)
+├── preview-env/             # ArgoCD ApplicationSet for preview automation (if present)
+└── CLAUDE.md               # Development guidance for AI assistants
 ```
 
 ## Quick Start
@@ -27,15 +32,17 @@ Kubernetes deployment configurations for the Take Flight e-commerce platform usi
 # Install with production values (default)
 helm upgrade --install takeflight ./apps/takeflight
 
-# Install with preview environment values
-helm upgrade --install takeflight ./apps/takeflight -f apps/takeflight/preview/store-bigcommerce/values.yaml
+# Install with preview environment values (example with dynamically created values)
+helm upgrade --install takeflight ./apps/takeflight -f apps/takeflight/preview/[store-type]/values.yaml
 ```
 
 ### Development Workflow
 
 1. **Validate charts**: `helm lint apps/takeflight/`
 2. **Test templates**: `helm template takeflight ./apps/takeflight -f apps/takeflight/values.yaml`
-3. **Dry run**: `helm template takeflight ./apps/takeflight | kubectl apply --dry-run=client -f -`
+3. **Test with preview values**: `helm template takeflight ./apps/takeflight -f apps/takeflight/preview/[store-type]/values.yaml`
+4. **Dry run**: `helm template takeflight ./apps/takeflight -f apps/takeflight/values.yaml | kubectl apply --dry-run=client -f -`
+5. **Package chart**: `helm package apps/takeflight/`
 
 ## Security Guidelines
 
@@ -74,9 +81,9 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 - **Values**: Configured directly in `apps/takeflight/values.yaml`
 
 ### Preview Environments
-- **Auto-generated**: Based on values files in `apps/takeflight/preview/`
-- **Stores**: Adobe Commerce, BigCommerce
-- **Management**: ArgoCD ApplicationSet in `argocd/applicationsets/`
+- **Auto-generated**: Preview environment values are dynamically managed by separate repository
+- **Template**: `values-template.yaml` provides the base template for new preview environments
+- **Management**: ArgoCD ApplicationSet (when configured)
 
 ## GitOps Workflow
 
@@ -86,10 +93,11 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 - Application definitions applied to ArgoCD cluster
 
 ### Deployment Flow
-1. **Feature Development**: Work on feature branches
+1. **Feature Development**: Work on feature branches following naming convention `feature/TF2-XXX_description`
 2. **Preview**: Update values in `apps/takeflight/preview/` for testing
-   - ArgoCD ApplicationSet automatically creates preview applications
-3. **Production**: Merge to main triggers ArgoCD sync to production via `argocd/applications/takeflight-production.yaml`
+   - ArgoCD ApplicationSet automatically creates preview applications (when configured)
+   - Use `template-tag` placeholder for dynamic image tags in CI/CD
+3. **Production**: Merge to main triggers ArgoCD sync to production
 
 ## ArgoCD Integration
 
@@ -98,10 +106,10 @@ Certificate ARNs are centralized in the `certificates` section of values files.
 - **Repository Access**: ArgoCD needs read access to this repository
 
 ### Application Definitions
-This repository contains ArgoCD application definitions (not ArgoCD installation files):
+This repository is designed to work with ArgoCD application definitions:
 
-- **Applications**: Defined in `argocd/applications/` for production deployment
-- **ApplicationSets**: Defined in `argocd/applicationsets/` for automated preview environments  
+- **Applications**: Can be defined in `environments/` directories for environment-specific deployments
+- **ApplicationSets**: Can be defined in `preview-env/` for automated preview environment management
 - **Purpose**: These files tell ArgoCD **what** to deploy, not **how** to install ArgoCD itself
 
 ### Architecture
@@ -119,18 +127,24 @@ This repository contains ArgoCD application definitions (not ArgoCD installation
 - **ArgoCD not deploying**: Ensure ArgoCD is installed and has access to this repository
 - **Application not syncing**: Check ArgoCD UI for sync status and errors
 
-### Health Checks
+## Key Configuration
 
-Health checks are commented out in `deployment.yaml`. Enable for production:
+### Image Management
+- **Registry**: `registry.takeflight.com.au/aligent/takeflight2-nextjs-docker`
+- **Preview Environments**: Use `template-tag` placeholder for dynamic image tagging in CI/CD
+- **Production**: Specify exact image tags in `values.yaml`
 
-```yaml
-readinessProbe:
-  httpGet:
-    path: /
-    port: 3000
-  initialDelaySeconds: 15
-  periodSeconds: 10
-```
+### Ingress Configuration
+- **Controller**: AWS ALB Ingress Controller
+- **SSL**: ACM certificate termination
+- **Hostnames**: Environment-specific domains configured per values file
+
+### Environment Variables
+Core variables required for all deployments:
+- `NEXTAUTH_SECRET` / `AUTH_SECRET`
+- `NEXTAUTH_URL`
+- `NODE_ENV`
+- `HOST`
 
 ## Contributing
 
@@ -138,3 +152,4 @@ readinessProbe:
 2. Test changes with `helm lint apps/takeflight/` and `helm template`
 3. Update production values in `apps/takeflight/values.yaml` or preview values in `apps/takeflight/preview/`
 4. Commit with ticket reference: `TF2-XXX: Description`
+5. Follow GitOps principles - avoid direct cluster modifications
