@@ -40,3 +40,31 @@ env:
   NEXTAUTH_URL: "https://takeflight.aligent.com"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
+
+storybook:
+  enabled: true
+  replicaCount: 1
+  revisionHistoryLimit: 5
+  
+  image:
+    repository: "aligent/takeflight2-nextjs-docker"
+    tag: "storybook-store-adobecommerce-ff884d6"
+    pullPolicy: Always
+  
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 6006
+  
+  resources:
+    limits:
+      cpu: "250m"
+      memory: "256Mi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+  
+  ingress:
+    enabled: true
+    hostname: "storybook.takeflight.aligent.com"
+    certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/171401ce-1512-40ab-a624-8ad557849a64"

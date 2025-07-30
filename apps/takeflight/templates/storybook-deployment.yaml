@@ -1,0 +1,29 @@
+{{- if .Values.storybook.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: takeflight-storybook
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: takeflight-storybook
+spec:
+  replicas: {{ .Values.storybook.replicaCount }}
+  revisionHistoryLimit: {{ .Values.storybook.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app: takeflight-storybook
+  template:
+    metadata:
+      labels:
+        app: takeflight-storybook
+    spec:
+      serviceAccountName: takeflight-irsa-role
+      containers:
+        - name: takeflight-storybook
+          image: "{{ .Values.storybook.image.repository }}:{{ .Values.storybook.image.tag }}"
+          imagePullPolicy: {{ .Values.storybook.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.storybook.service.targetPort }}
+          resources:
+            {{- toYaml .Values.storybook.resources | nindent 12 }}
+{{- end }}

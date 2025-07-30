@@ -30,3 +30,15 @@ env:
   NEXTAUTH_URL: "https://store-adobecommerce-tf2-625.takeflight2.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
+
+storybook:
+  enabled: true
+  image:
+    repository: "aligent/takeflight2-nextjs-docker"
+    tag: "storybook-store-adobecommerce-de8aff1"
+    pullPolicy: Always
+  
+  ingress:
+    enabled: true
+    hostname: "storybook-store-adobecommerce-tf2-625.takeflight2.aligent.cloud"
+    certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/30f1ca2f-35f4-44bb-919a-d902569eb0f5"

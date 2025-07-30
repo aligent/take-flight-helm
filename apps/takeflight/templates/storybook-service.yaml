@@ -1,0 +1,17 @@
+{{- if .Values.storybook.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: takeflight-storybook
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: takeflight-storybook
+spec:
+  selector:
+    app: takeflight-storybook
+  type: {{ .Values.storybook.service.type }}
+  ports:
+    - port: {{ .Values.storybook.service.port }}
+      targetPort: {{ .Values.storybook.service.targetPort }}
+      protocol: TCP
+{{- end }}
