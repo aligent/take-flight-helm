@@ -3,7 +3,7 @@ revisionHistoryLimit: 0
 
 image:
   repository: "aligent/takeflight2-nextjs-docker"
-  tag: "store-acaacs-a66babc"
+  tag: "store-acaacs-577bb68"
   pullPolicy: Always
 
 service:
