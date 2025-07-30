@@ -66,3 +66,14 @@ spec:
           #   periodSeconds: 20
           #   failureThreshold: 5
           #   timeoutSeconds: 2
+          volumeMounts:
+          - name: secrets-store
+            mountPath: "/mnt/secrets-store"
+            readOnly: true
+      volumes:
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ .Values.secretsStore.secretProviderClass | default "takeflight-secrets" }}

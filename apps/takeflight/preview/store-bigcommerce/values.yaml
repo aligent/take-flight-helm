@@ -24,9 +24,12 @@ ingress:
   hostname: "store-bigcommerce.takeflight2.aligent.cloud"
   certarn: "arn:aws:acm:ap-southeast-2:182399723872:certificate/30f1ca2f-35f4-44bb-919a-d902569eb0f5"
 
+secretsStore:
+  secretProviderClass: "takeflight-secrets-bigcommerce"
+  secretName: "takeflight-bigcommerce-secrets"
+
 env:
-  NEXTAUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
-  AUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
+  # Secrets are now managed by AWS Secrets Manager via CSI driver
   NEXTAUTH_URL: "https://store-bigcommerce.takeflight2.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"

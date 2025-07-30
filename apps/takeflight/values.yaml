@@ -29,14 +29,14 @@ certificates:
   preview: "arn:aws:acm:ap-southeast-2:182399723872:certificate/30f1ca2f-35f4-44bb-919a-d902569eb0f5"
 
 secrets:
-  create: true
+  create: false
   name: "takeflight-secrets"
 
+secretsStore:
+  secretProviderClass: "takeflight-secrets"
+  secretName: "takeflight-app-secrets"
+
 env:
-  NEXTAUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
-  AUTH_SECRET: "REPLACE_WITH_SECURE_SECRET"
   NEXTAUTH_URL: "https://takeflight.aligent.com"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
-
-
