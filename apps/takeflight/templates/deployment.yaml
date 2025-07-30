@@ -1,35 +1,58 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nextjs
+  name: takeflight
   namespace: {{ .Release.Namespace }}
   labels:
-    app: nextjs
+    app: takeflight
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app: nextjs
+      app: takeflight
   template:
     metadata:
       labels:
-        app: nextjs
+        app: takeflight
     spec:
-      serviceAccountName: nextjs-serviceaccount
+      serviceAccountName: takeflight-irsa-role
       containers:
-        - name: nextjs
+        - name: takeflight
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.targetPort }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
           - name: "NEXTAUTH_SECRET"
+            {{- if .Values.secrets.create }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.name | default "takeflight-secrets" }}
+                key: NEXTAUTH_SECRET
+            {{- else }}
             value: {{ .Values.env.NEXTAUTH_SECRET | quote }}
+            {{- end }}
           - name: "AUTH_SECRET"
+            {{- if .Values.secrets.create }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.name | default "takeflight-secrets" }}
+                key: AUTH_SECRET
+            {{- else }}
             value: {{ .Values.env.AUTH_SECRET | quote }}
+            {{- end }}
           - name: "NEXTAUTH_URL"
             value: {{ .Values.env.NEXTAUTH_URL | quote }}
           - name: "NODE_ENV"
@@ -52,3 +75,14 @@ spec:
           #   periodSeconds: 20
           #   failureThreshold: 5
           #   timeoutSeconds: 2
+          volumeMounts:
+          - name: secrets-store
+            mountPath: "/mnt/secrets-store"
+            readOnly: true
+      volumes:
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ .Values.secretsStore.secretProviderClass | default "takeflight-secrets" }}

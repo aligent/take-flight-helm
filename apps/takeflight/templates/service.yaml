@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nextjs
+  name: takeflight
   namespace: {{ .Release.Namespace }}
   labels:
-    app: nextjs
+    app: takeflight
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "{{ .Values.ingress.hostname }}"
 spec:
@@ -14,4 +14,4 @@ spec:
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
   selector:
-    app: nextjs
+    app: takeflight
