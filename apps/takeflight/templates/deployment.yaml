@@ -16,7 +16,7 @@ spec:
       labels:
         app: takeflight
     spec:
-      serviceAccountName: takeflight-irsa
+      serviceAccountName: takeflight-irsa-role
       containers:
         - name: takeflight
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
