@@ -51,3 +51,10 @@ awsLoadBalancerController:
     name: "aws-load-balancer-controller"
   image:
     repository: "602401143452.dkr.ecr.ap-southeast-2.amazonaws.com/amazon/aws-load-balancer-controller"
+
+# External DNS configuration
+externalDns:
+  enable: true
+  domain: "takeflight.aligent.cloud"
+  zoneId: "Z03717161X319SNYY1IIX"
+  region: "ap-southeast-2"

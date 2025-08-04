@@ -1,0 +1,41 @@
+replicaCount: 1
+
+image:
+  repository: registry.k8s.io/external-dns/external-dns
+  tag: "v0.15.0"
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  name: external-dns
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::015869558327:role/prd-TakeFlight-Cluster-externaldnsproductionServiceRole
+
+domain: takeflight.aligent.cloud
+zoneId: Z03717161X319SNYY1IIX
+
+# AWS region
+region: ap-southeast-2
+
+# Only manage records for this domain
+domainFilters:
+  - takeflight.aligent.cloud
+
+# Log level
+logLevel: info
+
+# Dry run mode - set to false to actually create DNS records
+dryRun: false
+
+# Sync interval
+interval: 1m
+
+# Text record format
+txtOwnerId: external-dns
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
