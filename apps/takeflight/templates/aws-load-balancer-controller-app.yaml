@@ -9,8 +9,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: {{ .Values.repoUrl }}
-    targetRevision: {{ .Values.targetRevision }}
+    repoURL: git@github.com:aligent/take-flight-helm.git
+    targetRevision: feature/TF2-21_repository_restructuring
     path: apps/aws-load-balancer-controller
     helm:
       parameters:

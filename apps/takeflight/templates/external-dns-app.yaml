@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: git@github.com:aligent/take-flight-helm.git
-    targetRevision: {{ .Values.global.targetRevision | default "HEAD" }}
+    targetRevision: feature/TF2-21_repository_restructuring
     path: apps/external-dns
     helm:
       parameters:
