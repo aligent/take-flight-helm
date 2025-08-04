@@ -1,9 +1,0 @@
-# Adobe Commerce store-specific overrides
-image:
-  tag: "store-adobecommerce-b72e213"
-
-ingress:
-  hostname: "store-adobecommerce.takeflight.aligent.cloud"
-
-env:
-  NEXTAUTH_URL: "https://store-adobecommerce.takeflight.aligent.cloud"

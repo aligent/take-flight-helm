@@ -7,7 +7,7 @@ revisionHistoryLimit: 0
 
 image:
   repository: "aligent/takeflight-nextjs-docker"
-  tag: "latest"
+  tag: "store-adobecommerce-b72e213"
   pullPolicy: Always
 
 service:
@@ -25,7 +25,7 @@ resources:
 
 ingress:
   enabled: true
-  hostname: ""
+  hostname: "store-adobecommerce.takeflight.aligent.cloud"
   certarn: "arn:aws:acm:ap-southeast-2:015869558327:certificate/4a18f727-3164-4481-892b-9716dcae5a60"
 
 secrets:
@@ -37,5 +37,6 @@ secretsStore:
   secretName: "takeflight-secrets"
 
 env:
+  NEXTAUTH_URL: "https://store-adobecommerce.takeflight.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
