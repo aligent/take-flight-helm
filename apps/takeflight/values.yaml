@@ -40,3 +40,14 @@ env:
   NEXTAUTH_URL: "https://store-adobecommerce.takeflight.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
+
+# AWS Load Balancer Controller configuration
+awsLoadBalancerController:
+  enable: true
+  clusterName: "TakeFlight-Cluster"
+  region: "ap-southeast-2"
+  vpcId: ""  # Will be populated by ArgoCD parameters
+  serviceAccount:
+    name: "aws-load-balancer-controller"
+  image:
+    repository: "602401143452.dkr.ecr.ap-southeast-2.amazonaws.com/amazon/aws-load-balancer-controller"

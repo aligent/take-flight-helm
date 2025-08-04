@@ -1,0 +1,37 @@
+# AWS Load Balancer Controller configuration
+image:
+  repository: 602401143452.dkr.ecr.ap-southeast-2.amazonaws.com/amazon/aws-load-balancer-controller
+  tag: v2.10.0
+  pullPolicy: IfNotPresent
+
+clusterName: TakeFlight-Cluster
+region: ap-southeast-2
+vpcId: ""  # Will be set by ArgoCD parameters
+
+serviceAccount:
+  create: false
+  name: aws-load-balancer-controller
+
+ingress:
+  class: alb
+  createIngressClassResource: true
+
+aws:
+  enableShield: false
+  enableWaf: false
+  enableWafv2: false
+  enableServiceMutatorWebhook: false
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 200Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+replicaCount: 1
