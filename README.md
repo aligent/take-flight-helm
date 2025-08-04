@@ -130,7 +130,7 @@ This repository is designed to work with ArgoCD application definitions:
 ## Key Configuration
 
 ### Image Management
-- **Registry**: `registry.takeflight.com.au/aligent/takeflight2-nextjs-docker`
+- **Registry**: `registry.takeflight.com.au/aligent/takeflight-nextjs-docker`
 - **Preview Environments**: Use `template-tag` placeholder for dynamic image tagging in CI/CD
 - **Production**: Specify exact image tags in `values.yaml`
 
