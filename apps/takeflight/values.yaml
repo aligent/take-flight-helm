@@ -7,7 +7,7 @@ revisionHistoryLimit: 0
 
 image:
   repository: "aligent/takeflight-nextjs-docker"
-  tag: "store-adobecommerce-b72e213"
+  tag: "latest"
   pullPolicy: Always
 
 service:
@@ -25,15 +25,17 @@ resources:
 
 ingress:
   enabled: true
-  hostname: "store-adobecommerce.takeflight.aligent.cloud"
+  hostname: ""
   certarn: "arn:aws:acm:ap-southeast-2:015869558327:certificate/4a18f727-3164-4481-892b-9716dcae5a60"
 
+secrets:
+  create: false
+  name: "takeflight-secrets"
+
 secretsStore:
-  secretProviderClass: "takeflight-secrets-adobecommerce"
-  secretName: "takeflight-adobecommerce-secrets"
+  secretProviderClass: "takeflight-secrets"
+  secretName: "takeflight-secrets"
 
 env:
-  # Secrets are now managed by AWS Secrets Manager via CSI driver
-  NEXTAUTH_URL: "https://store-adobecommerce.takeflight.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
