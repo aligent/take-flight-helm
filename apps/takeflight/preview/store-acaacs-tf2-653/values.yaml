@@ -39,7 +39,7 @@ secretsStore:
 env:
   NEXTAUTH_URL: "https://store-acaacs-tf2-653.takeflight2.aligent.cloud"
   NODE_ENV: "production"
-  HOST: "0.0.0.0"takeflight
+  HOST: "0.0.0.0"
   DEBUG: "1"
   NEXT_DEBUG: "1"
 

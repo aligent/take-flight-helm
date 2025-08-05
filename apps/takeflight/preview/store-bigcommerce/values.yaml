@@ -2,11 +2,11 @@ replicaCount: 1
 revisionHistoryLimit: 0
 
 # Main store configuration (enabled for individual stores)
-mainStore:takeflight
+mainStore:
   enabled: true
 
 image:
-  repository: "aligent/takeflight2-nextjs-docker"
+  repository: "aligent/takeflight-nextjs-docker"
   tag: "store-bigcommerce-0bdcfe7"
   pullPolicy: Always
 
@@ -21,13 +21,12 @@ resources:
     memory: "512Mi"
   requests:
     cpu: "250m"
-    memory: "256Mi"takeflight
+    memory: "256Mi"
 
 ingress:
   enabled: true
   hostname: "store-bigcommerce.takeflight2.aligent.cloud"
   certarn: "arn:aws:acm:ap-southeast-2:015869558327:certificate/4a18f727-3164-4481-892b-9716dcae5a60"
-takeflight
 secrets:
   create: true
   name: "takeflight-secrets"
