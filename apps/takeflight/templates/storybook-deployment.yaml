@@ -34,7 +34,21 @@ spec:
                 - ALL
           resources:
             {{- toYaml .Values.storybook.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+            - name: var-cache-nginx
+              mountPath: /var/cache/nginx
+            - name: var-run
+              mountPath: /var/run
           env:
           - name: "NODE_ENV"
             value: {{ .Values.env.NODE_ENV | quote }}
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+        - name: var-cache-nginx
+          emptyDir: {}
+        - name: var-run
+          emptyDir: {}
 {{- end }}

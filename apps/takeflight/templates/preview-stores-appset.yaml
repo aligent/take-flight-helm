@@ -12,7 +12,7 @@ spec:
       - path: apps/takeflight/preview/store-*
   template:
     metadata:
-      name: 'takeflight-{{path.basename}}'
+      name: 'takeflight-{{`{{path.basename}}`}}'
       namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
@@ -24,10 +24,10 @@ spec:
         path: apps/takeflight
         helm:
           valueFiles:
-          - preview/{{path.basename}}/values.yaml
+          - preview/{{`{{path.basename}}`}}/values.yaml
       destination:
         server: https://kubernetes.default.svc
-        namespace: takeflight-{{path.basename}}
+        namespace: takeflight-{{`{{path.basename}}`}}
       syncPolicy:
         automated:
           prune: true
