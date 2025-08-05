@@ -1,17 +1,16 @@
-# Default values for takeflight
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-# Main store configuration (disabled by default - only Storybook hosts by default)
-mainStore:
-  enabled: false
+# Template values for individual store deployments
+# This file is used by the CI/CD pipeline to create store-specific values.yaml files
 
 replicaCount: 1
 revisionHistoryLimit: 0
 
+# Main store configuration (enabled for individual stores)
+mainStore:
+  enabled: true
+
 image:
   repository: "aligent/takeflight-nextjs-docker"
-  tag: "latest" # won't be used
+  tag: "PLACEHOLDER_TAG"
   pullPolicy: Always
 
 service:
@@ -29,7 +28,7 @@ resources:
 
 ingress:
   enabled: true
-  hostname: "store.takeflight.aligent.cloud"
+  hostname: "PLACEHOLDER_HOSTNAME"
   certarn: "arn:aws:acm:ap-southeast-2:015869558327:certificate/4a18f727-3164-4481-892b-9716dcae5a60"
 
 secrets:
@@ -41,33 +40,15 @@ secretsStore:
   secretName: "takeflight-secrets"
 
 env:
-  NEXTAUTH_URL: "https://store.takeflight.aligent.cloud"
+  NEXTAUTH_URL: "PLACEHOLDER_NEXTAUTH_URL"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
   DEBUG: "1"
   NEXT_DEBUG: "1"
 
-# Storybook service configuration
+# Storybook is disabled for individual store deployments
 storybook:
-  enabled: true
-  replicaCount: 1
-  image:
-    repository: "aligent/takeflight-nextjs-docker"
-    tag: "storybook-b72e213"
-    pullPolicy: Always
-  service:
-    type: ClusterIP
-    port: 80
-    targetPort: 3000
-  resources:
-    limits:
-      cpu: "250m"
-      memory: "256Mi"
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-  ingress:
-    hostname: "storybook.takeflight.aligent.cloud"
+  enabled: false
 
 # AWS Load Balancer Controller configuration
 awsLoadBalancerController:
@@ -86,4 +67,3 @@ externalDns:
   domain: "takeflight.aligent.cloud"
   zoneId: "Z03717161X319SNYY1IIX"
   region: "ap-southeast-2"
-
