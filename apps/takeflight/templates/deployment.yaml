@@ -24,14 +24,9 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
+            runAsNonRoot: false
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
-            capabilities:
-              drop:
-                - ALL
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
