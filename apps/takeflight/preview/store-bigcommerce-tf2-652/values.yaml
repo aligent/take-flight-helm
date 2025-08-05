@@ -1,16 +1,13 @@
-# Template values for individual store deployments
-# This file is used by the CI/CD pipeline to create store-specific values.yaml files
-
 replicaCount: 1
 revisionHistoryLimit: 0
 
 # Main store configuration (enabled for individual stores)
-mainStore:
+mainStore:takeflight
   enabled: true
 
 image:
-  repository: "aligent/takeflight-nextjs-docker"
-  tag: "PLACEHOLDER_TAG"
+  repository: "aligent/takeflight2-nextjs-docker"
+  tag: "store-bigcommerce-85f939b"
   pullPolicy: Always
 
 service:
@@ -24,13 +21,13 @@ resources:
     memory: "512Mi"
   requests:
     cpu: "250m"
-    memory: "256Mi"
+    memory: "256Mi"takeflight
 
 ingress:
   enabled: true
-  hostname: "PLACEHOLDER_HOSTNAME"
+  hostname: "store-bigcommerce-tf2-652.takeflight2.aligent.cloud"
   certarn: "arn:aws:acm:ap-southeast-2:015869558327:certificate/4a18f727-3164-4481-892b-9716dcae5a60"
-
+takeflight
 secrets:
   create: true
   name: "takeflight-secrets"
@@ -40,7 +37,7 @@ secretsStore:
   secretName: "takeflight-secrets"
 
 env:
-  NEXTAUTH_URL: "PLACEHOLDER_NEXTAUTH_URL"
+  NEXTAUTH_URL: "https://store-bigcommerce-tf2-652.takeflight2.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
   DEBUG: "1"
