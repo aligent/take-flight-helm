@@ -7,7 +7,7 @@ spec:
   generators:
   - git:
       repoURL: git@github.com:aligent/take-flight-helm.git
-      revision: HEAD
+      revision: {{ .Values.targetRevision }}
       directories:
       - path: apps/takeflight/preview/store-*
   template:
@@ -20,7 +20,7 @@ spec:
       project: default
       source:
         repoURL: git@github.com:aligent/take-flight-helm.git
-        targetRevision: HEAD
+        targetRevision: {{ .Values.targetRevision }}
         path: apps/takeflight
         helm:
           valueFiles:
