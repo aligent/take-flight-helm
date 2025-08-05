@@ -49,7 +49,7 @@ storybook:
   replicaCount: 1
   image:
     repository: "aligent/takeflight-nextjs-docker"
-    tag: "storybook-store-adobecommerce-b72e213"
+    tag: "storybook-b72e213"
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -63,7 +63,7 @@ storybook:
       cpu: "100m"
       memory: "128Mi"
   ingress:
-    hostname: "storybook-store-adobecommerce.takeflight.aligent.cloud"
+    hostname: "storybook.takeflight.aligent.cloud"
 
 # AWS Load Balancer Controller configuration
 awsLoadBalancerController:
