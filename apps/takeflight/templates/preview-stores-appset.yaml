@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: takeflight-preview-stores
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: git@github.com:aligent/take-flight-helm.git
+      revision: HEAD
+      directories:
+      - path: apps/takeflight/preview/store-*
+  template:
+    metadata:
+      name: 'takeflight-{{path.basename}}'
+      namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+        repoURL: git@github.com:aligent/take-flight-helm.git
+        targetRevision: HEAD
+        path: apps/takeflight
+        helm:
+          valueFiles:
+          - preview/{{path.basename}}/values.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: takeflight-{{path.basename}}
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: false
+        syncOptions:
+        - CreateNamespace=true
+        retry:
+          limit: 3
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m
