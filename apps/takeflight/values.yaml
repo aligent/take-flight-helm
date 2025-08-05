@@ -29,7 +29,7 @@ ingress:
   certarn: "arn:aws:acm:ap-southeast-2:015869558327:certificate/4a18f727-3164-4481-892b-9716dcae5a60"
 
 secrets:
-  create: false
+  create: true
   name: "takeflight-secrets"
 
 secretsStore:
