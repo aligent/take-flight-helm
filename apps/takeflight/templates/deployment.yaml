@@ -54,6 +54,10 @@ spec:
             value: {{ .Values.env.NODE_ENV | quote }}
           - name: "HOST"
             value: {{ .Values.env.HOST | quote }}
+          - name: "DEBUG"
+            value: {{ .Values.env.DEBUG | quote }}
+          - name: "NEXT_DEBUG"
+            value: {{ .Values.env.NEXT_DEBUG | quote }}
           # readinessProbe:
           #   httpGet:
           #     path: /

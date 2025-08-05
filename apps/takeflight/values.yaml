@@ -40,6 +40,8 @@ env:
   NEXTAUTH_URL: "https://store-adobecommerce.takeflight.aligent.cloud"
   NODE_ENV: "production"
   HOST: "0.0.0.0"
+  DEBUG: "1"
+  NEXT_DEBUG: "1"
 
 # Storybook service configuration
 storybook:
