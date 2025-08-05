@@ -79,6 +79,9 @@ spec:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
           runAsNonRoot: true
+          capabilities:
+            drop:
+            - NET_RAW
         env:
         - name: AWS_DEFAULT_REGION
           value: {{ .Values.region }}
