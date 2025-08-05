@@ -54,7 +54,7 @@ storybook:
   service:
     type: ClusterIP
     port: 80
-    targetPort: 6006
+    targetPort: 3000
   resources:
     limits:
       cpu: "250m"
