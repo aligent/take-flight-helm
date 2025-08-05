@@ -87,3 +87,6 @@ externalDns:
   zoneId: "Z03717161X319SNYY1IIX"
   region: "ap-southeast-2"
 
+# Target revision for ApplicationSet (overridden by ArgoCD parameter)
+targetRevision: "feature/TF2-21_repository_restructuring"
+
