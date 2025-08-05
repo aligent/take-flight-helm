@@ -1,0 +1,61 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: takeflight
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: "[{\"HTTPS\": 443}, {\"HTTP\": 80}]"
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certarn }}
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.ingress.hostname }}{{- if .Values.storybook.enabled }},{{ .Values.storybook.ingress.hostname }}{{- end }}
+spec:
+  ingressClassName: alb
+  rules:
+    - host: {{ .Values.ingress.hostname }}
+      http:
+        paths:
+          - path: /_next/
+            pathType: Prefix
+            backend:
+              service:
+                name: takeflight
+                port:
+                  number: {{ .Values.service.port }}
+
+          - path: /static/
+            pathType: Prefix
+            backend:
+              service:
+                name: takeflight
+                port:
+                  number: {{ .Values.service.port }}
+
+          - path: /favicon.ico
+            pathType: Exact
+            backend:
+              service:
+                name: takeflight
+                port:
+                  number: {{ .Values.service.port }}
+
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: takeflight
+                port:
+                  number: {{ .Values.service.port }}
+{{- if .Values.storybook.enabled }}
+    - host: {{ .Values.storybook.ingress.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: storybook
+                port:
+                  number: {{ .Values.storybook.service.port }}
+{{- end }}

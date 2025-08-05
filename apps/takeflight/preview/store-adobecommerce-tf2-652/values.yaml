@@ -1,0 +1,66 @@
+replicaCount: 1
+revisionHistoryLimit: 0
+
+# Main store configuration (enabled for individual stores)
+mainStore:
+  enabled: true
+
+image:
+  repository: "aligent/takeflight-nextjs-docker"
+  tag: "store-adobecommerce-85f939b"
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+
+ingress:
+  enabled: true
+  hostname: "store-adobecommerce-tf2-652.takeflight.aligent.cloud"
+  certarn: "arn:aws:acm:ap-southeast-2:015869558327:certificate/4a18f727-3164-4481-892b-9716dcae5a60"
+
+secrets:
+  create: true
+  name: "takeflight-secrets"
+
+secretsStore:
+  secretProviderClass: "takeflight-secrets"
+  secretName: "takeflight-secrets"
+
+env:
+  NEXTAUTH_URL: "https://store-adobecommerce-tf2-652.takeflight2.aligent.cloud"
+  NODE_ENV: "production"
+  HOST: "0.0.0.0"
+  DEBUG: "1"
+  NEXT_DEBUG: "1"
+
+# Storybook is disabled for individual store deployments
+storybook:
+  enabled: false
+
+# AWS Load Balancer Controller configuration
+awsLoadBalancerController:
+  enable: true
+  clusterName: "TakeFlight-Cluster"
+  region: "ap-southeast-2"
+  vpcId: ""  # Will be populated by ArgoCD parameters
+  serviceAccount:
+    name: "aws-load-balancer-controller"
+  image:
+    repository: "602401143452.dkr.ecr.ap-southeast-2.amazonaws.com/amazon/aws-load-balancer-controller"
+
+# External DNS configuration
+externalDns:
+  enable: true
+  domain: "takeflight.aligent.cloud"
+  zoneId: "Z03717161X319SNYY1IIX"
+  region: "ap-southeast-2"

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: aws-load-balancer-controller
+description: AWS Load Balancer Controller for EKS
+type: application
+version: 0.1.0
+appVersion: "v2.10.0"

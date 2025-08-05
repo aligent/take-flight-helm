@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-load-balancer-controller
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: aws-load-balancer-controller
+    app.kubernetes.io/component: controller
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aws-load-balancer-controller
+      app.kubernetes.io/component: controller
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aws-load-balancer-controller
+        app.kubernetes.io/component: controller
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      initContainers:
+      - name: cert-generator
+        image: alpine:3.22.1@sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1
+        command:
+        - sh
+        - -c
+        - |
+          apk add --no-cache openssl
+          mkdir -p /tmp/certs
+          openssl req -x509 -newkey rsa:2048 -keyout /tmp/certs/tls.key -out /tmp/certs/tls.crt -days 365 -nodes -subj "/CN=aws-load-balancer-webhook"
+          chmod 644 /tmp/certs/tls.crt /tmp/certs/tls.key
+        volumeMounts:
+        - name: cert-dir
+          mountPath: /tmp/certs
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+      containers:
+      - name: controller
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+        - --cluster-name={{ .Values.clusterName }}
+        - --ingress-class={{ .Values.ingress.class }}
+        - --enable-shield={{ .Values.aws.enableShield }}
+        - --enable-waf={{ .Values.aws.enableWaf }}
+        - --enable-wafv2={{ .Values.aws.enableWafv2 }}
+        - --aws-region={{ .Values.region }}
+        - --disable-ingress-class-annotation=true
+        - --disable-ingress-group-name-annotation=true
+        - --feature-gates=EnableServiceController=false
+        - --webhook-cert-dir=/tmp/certs
+        {{- if .Values.vpcId }}
+        - --aws-vpc-id={{ .Values.vpcId }}
+        {{- end }}
+        ports:
+        - containerPort: 8080
+          name: metrics
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 61779
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 2
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 61779
+            scheme: HTTP
+          initialDelaySeconds: 10
+          timeoutSeconds: 10
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - NET_RAW
+        env:
+        - name: AWS_DEFAULT_REGION
+          value: {{ .Values.region }}
+        - name: AWS_REGION
+          value: {{ .Values.region }}
+        volumeMounts:
+        - name: cert-dir
+          mountPath: /tmp/certs
+          readOnly: true
+      securityContext:
+        fsGroup: 65534
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: cert-dir
+        emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

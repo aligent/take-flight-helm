@@ -1,0 +1,32 @@
+{{- if .Values.externalDns.enable }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:aligent/take-flight-helm.git
+    targetRevision: feature/TF2-21_repository_restructuring
+    path: apps/external-dns
+    helm:
+      parameters:
+        - name: domain
+          value: {{ .Values.externalDns.domain }}
+        - name: zoneId
+          value: {{ .Values.externalDns.zoneId }}
+        - name: region
+          value: {{ .Values.externalDns.region }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+{{- end }}

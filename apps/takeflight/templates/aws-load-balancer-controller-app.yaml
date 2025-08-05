@@ -1,0 +1,37 @@
+{{- if .Values.awsLoadBalancerController.enable }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:aligent/take-flight-helm.git
+    targetRevision: feature/TF2-21_repository_restructuring
+    path: apps/aws-load-balancer-controller
+    helm:
+      parameters:
+      - name: clusterName
+        value: {{ .Values.awsLoadBalancerController.clusterName | quote }}
+      - name: region
+        value: {{ .Values.awsLoadBalancerController.region | quote }}
+      - name: vpcId
+        value: {{ .Values.awsLoadBalancerController.vpcId | quote }}
+      - name: serviceAccount.name
+        value: {{ .Values.awsLoadBalancerController.serviceAccount.name | quote }}
+      - name: image.repository
+        value: {{ .Values.awsLoadBalancerController.image.repository | quote }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: true
+    syncOptions:
+    - CreateNamespace=false  # kube-system already exists
+{{- end }}

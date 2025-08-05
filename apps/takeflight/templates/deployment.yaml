@@ -1,0 +1,94 @@
+{{- if .Values.mainStore.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: takeflight
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: takeflight
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app: takeflight
+  template:
+    metadata:
+      labels:
+        app: takeflight
+    spec:
+      serviceAccountName: takeflight-irsa-role
+      containers:
+        - name: takeflight
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: "NEXTAUTH_SECRET"
+            {{- if .Values.secrets.create }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.name | default "takeflight-secrets" }}
+                key: NEXTAUTH_SECRET
+            {{- else }}
+            value: {{ .Values.env.NEXTAUTH_SECRET | quote }}
+            {{- end }}
+          - name: "AUTH_SECRET"
+            {{- if .Values.secrets.create }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.name | default "takeflight-secrets" }}
+                key: AUTH_SECRET
+            {{- else }}
+            value: {{ .Values.env.AUTH_SECRET | quote }}
+            {{- end }}
+          - name: "NEXTAUTH_URL"
+            value: {{ .Values.env.NEXTAUTH_URL | quote }}
+          - name: "NODE_ENV"
+            value: {{ .Values.env.NODE_ENV | quote }}
+          - name: "HOST"
+            value: {{ .Values.env.HOST | quote }}
+          - name: "DEBUG"
+            value: {{ .Values.env.DEBUG | quote }}
+          - name: "NEXT_DEBUG"
+            value: {{ .Values.env.NEXT_DEBUG | quote }}
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: {{ .Values.service.targetPort }}
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 10
+          #   failureThreshold: 10
+          #   timeoutSeconds: 2
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: {{ .Values.service.targetPort }}
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 20
+          #   failureThreshold: 5
+          #   timeoutSeconds: 2
+          volumeMounts:
+          - name: secrets-store
+            mountPath: "/mnt/secrets-store"
+            readOnly: true
+      volumes:
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ .Values.secretsStore.secretProviderClass | default "takeflight-secrets" }}
+{{- end }}
