@@ -41,6 +41,28 @@ env:
   NODE_ENV: "production"
   HOST: "0.0.0.0"
 
+# Storybook service configuration
+storybook:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: "aligent/takeflight-nextjs-docker"
+    tag: "storybook-store-adobecommerce-b72e213"
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 6006
+  resources:
+    limits:
+      cpu: "250m"
+      memory: "256Mi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+  ingress:
+    hostname: "storybook-store-adobecommerce.takeflight.aligent.cloud"
+
 # AWS Load Balancer Controller configuration
 awsLoadBalancerController:
   enable: true

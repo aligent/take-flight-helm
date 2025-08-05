@@ -1,0 +1,40 @@
+{{- if .Values.storybook.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storybook
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: storybook
+spec:
+  replicas: {{ .Values.storybook.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app: storybook
+  template:
+    metadata:
+      labels:
+        app: storybook
+    spec:
+      containers:
+        - name: storybook
+          image: "{{ .Values.storybook.image.repository }}:{{ .Values.storybook.image.tag }}"
+          imagePullPolicy: {{ .Values.storybook.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.storybook.service.targetPort }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            {{- toYaml .Values.storybook.resources | nindent 12 }}
+          env:
+          - name: "NODE_ENV"
+            value: {{ .Values.env.NODE_ENV | quote }}
+{{- end }}
