@@ -11,6 +11,8 @@ vpcId: ""  # Will be set by ArgoCD parameters
 serviceAccount:
   create: false
   name: aws-load-balancer-controller
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::015869558327:role/prd-TakeFlightTakeFlightC-TakeFlightClusterawsloadb-VUR4v7M2noEU"
 
 ingress:
   class: alb
