@@ -17,7 +17,7 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ if eq .Release.Namespace "takeflight-preview" }}{{ .Release.Name }}-irsa-role{{ else }}takeflight-irsa-role{{ end }}
+      serviceAccountName: {{ if eq .Release.Namespace "takeflight-preview" }}takeflight-preview-irsa-role{{ else }}takeflight-irsa-role{{ end }}
       containers:
         - name: takeflight
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
