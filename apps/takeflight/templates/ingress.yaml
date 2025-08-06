@@ -9,6 +9,11 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: "[{\"HTTPS\": 443}, {\"HTTP\": 80}]"
     alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certarn }}
     alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-path: "/"
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "5"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: "2"
     external-dns.alpha.kubernetes.io/hostname: {{ .Values.ingress.hostname }}{{- if .Values.storybook.enabled }},{{ .Values.storybook.ingress.hostname }}{{- end }}
 spec:
   ingressClassName: alb
