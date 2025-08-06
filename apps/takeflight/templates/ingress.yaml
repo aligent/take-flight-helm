@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: takeflight
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -20,7 +20,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: takeflight
+                name: {{ .Release.Name }}
                 port:
                   number: {{ .Values.service.port }}
 
@@ -28,7 +28,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: takeflight
+                name: {{ .Release.Name }}
                 port:
                   number: {{ .Values.service.port }}
 
@@ -36,7 +36,7 @@ spec:
             pathType: Exact
             backend:
               service:
-                name: takeflight
+                name: {{ .Release.Name }}
                 port:
                   number: {{ .Values.service.port }}
 
@@ -44,7 +44,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: takeflight
+                name: {{ .Release.Name }}
                 port:
                   number: {{ .Values.service.port }}
 {{- if .Values.storybook.enabled }}

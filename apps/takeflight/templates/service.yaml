@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: takeflight
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: takeflight
+    app: {{ .Release.Name }}
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "{{ .Values.ingress.hostname }}"
 spec:
@@ -15,5 +15,5 @@ spec:
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
   selector:
-    app: takeflight
+    app: {{ .Release.Name }}
 {{- end }}

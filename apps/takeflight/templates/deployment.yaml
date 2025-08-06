@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: takeflight
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: takeflight
+    app: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app: takeflight
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: takeflight
+        app: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ if eq .Release.Namespace "takeflight-preview" }}takeflight-preview-irsa-role{{ else }}takeflight-irsa-role{{ end }}
+      serviceAccountName: {{ if eq .Release.Namespace "takeflight-preview" }}{{ .Release.Name }}-irsa-role{{ else }}takeflight-irsa-role{{ end }}
       containers:
         - name: takeflight
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -40,7 +40,7 @@ spec:
             {{- if .Values.secrets.create }}
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.secrets.name | default "takeflight-secrets" }}
+                name: {{ if eq .Release.Namespace "takeflight-preview" }}{{ .Release.Name }}-secrets{{ else }}{{ .Values.secrets.name | default "takeflight-secrets" }}{{ end }}
                 key: NEXTAUTH_SECRET
             {{- else }}
             value: {{ .Values.env.NEXTAUTH_SECRET | quote }}
@@ -49,7 +49,7 @@ spec:
             {{- if .Values.secrets.create }}
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.secrets.name | default "takeflight-secrets" }}
+                name: {{ if eq .Release.Namespace "takeflight-preview" }}{{ .Release.Name }}-secrets{{ else }}{{ .Values.secrets.name | default "takeflight-secrets" }}{{ end }}
                 key: AUTH_SECRET
             {{- else }}
             value: {{ .Values.env.AUTH_SECRET | quote }}
@@ -64,31 +64,47 @@ spec:
             value: {{ .Values.env.DEBUG | quote }}
           - name: "NEXT_DEBUG"
             value: {{ .Values.env.NEXT_DEBUG | quote }}
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: {{ .Values.service.targetPort }}
-          #   initialDelaySeconds: 15
-          #   periodSeconds: 10
-          #   failureThreshold: 10
-          #   timeoutSeconds: 2
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: {{ .Values.service.targetPort }}
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 20
-          #   failureThreshold: 5
-          #   timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 30
+            timeoutSeconds: 5
           volumeMounts:
+          - name: tmp-volume
+            mountPath: /tmp
+          - name: nextjs-cache
+            mountPath: /.next
           - name: secrets-store
             mountPath: "/mnt/secrets-store"
             readOnly: true
       volumes:
+      - name: tmp-volume
+        emptyDir: {}
+      - name: nextjs-cache
+        emptyDir: {}
       - name: secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: {{ .Values.secretsStore.secretProviderClass | default "takeflight-secrets" }}
+            secretProviderClass: {{ if eq .Release.Namespace "takeflight-preview" }}{{ .Release.Name }}-secrets{{ else }}{{ .Values.secretsStore.secretProviderClass | default "takeflight-secrets" }}{{ end }}
 {{- end }}
