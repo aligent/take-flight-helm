@@ -7,6 +7,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: "[{\"HTTPS\": 443}, {\"HTTP\": 80}]"
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
     alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certarn }}
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/healthcheck-path: "/signup"
