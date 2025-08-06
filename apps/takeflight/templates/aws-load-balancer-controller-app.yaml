@@ -1,4 +1,4 @@
-{{- if and .Values.awsLoadBalancerController.enable (or (ne .Release.Namespace "takeflight-preview") (eq .Release.Name "takeflight-store-acaacs")) }}
+{{- if and .Values.awsLoadBalancerController.enable (ne .Release.Namespace "takeflight-preview") }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

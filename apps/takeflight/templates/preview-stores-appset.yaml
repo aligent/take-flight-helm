@@ -1,4 +1,4 @@
-{{- if or (ne .Release.Namespace "takeflight-preview") (eq .Release.Name "takeflight-store-acaacs") }}
+{{- if ne .Release.Namespace "takeflight-preview" }}
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
