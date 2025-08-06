@@ -1,4 +1,4 @@
-{{- if .Values.externalDns.enable }}
+{{- if and .Values.externalDns.enable (or (ne .Release.Namespace "takeflight-preview") (eq .Release.Name "takeflight-store-acaacs")) }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
