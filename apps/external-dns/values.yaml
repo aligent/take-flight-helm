@@ -8,7 +8,7 @@ image:
 serviceAccount:
   name: external-dns
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::015869558327:role/prd-TakeFlightTakeFlightC-TakeFlightClusterexternal-MKOIYmz4Udnl
+    eks.amazonaws.com/role-arn: arn:aws:iam::015869558327:role/prd-TakeFlightTakeFlightC-TakeFlightClusterexternal-piJtELs5nWs3
 
 domain: takeflight.aligent.cloud
 zoneId: Z03717161X319SNYY1IIX
