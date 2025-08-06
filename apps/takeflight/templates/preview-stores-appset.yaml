@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: takeflight-preview-stores
-  namespace: kube-system
+  namespace: argocd
 spec:
   generators:
   - git:
@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       name: 'takeflight-{{`{{path.basename}}`}}'
-      namespace: kube-system
+      namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:

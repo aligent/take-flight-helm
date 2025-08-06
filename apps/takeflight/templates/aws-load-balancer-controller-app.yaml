@@ -3,7 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: aws-load-balancer-controller
-  namespace: kube-system
+  namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -26,7 +26,7 @@ spec:
         value: {{ .Values.awsLoadBalancerController.image.repository | quote }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: kube-system
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
