@@ -10,6 +10,8 @@ metadata:
     alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
     alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certarn }}
     alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-protocol: "HTTP"
+    alb.ingress.kubernetes.io/healthcheck-port: "traffic-port" 
     alb.ingress.kubernetes.io/healthcheck-path: "/signup"
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "30"
