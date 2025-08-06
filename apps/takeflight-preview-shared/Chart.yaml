@@ -1,0 +1,6 @@
+apiVersion: v2
+name: takeflight-preview-shared
+description: Shared resources for TakeFlight preview environments
+type: application
+version: 0.1.0
+appVersion: "1.0"
