@@ -65,9 +65,11 @@ spec:
           - name: "NEXT_DEBUG"
             value: {{ .Values.env.NEXT_DEBUG | quote }}
           readinessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.service.targetPort }}
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - 'response=$(wget --spider -S http://localhost:{{ .Values.service.targetPort }}/ 2>&1); echo "$response" | grep -q "HTTP/1.1 [2-4]"'
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 3
@@ -81,8 +83,7 @@ spec:
             failureThreshold: 3
             timeoutSeconds: 5
           startupProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: {{ .Values.service.targetPort }}
             initialDelaySeconds: 5
             periodSeconds: 5
