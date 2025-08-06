@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: takeflight-preview-shared
-  namespace: argocd
+  namespace: takeflight-preview
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
