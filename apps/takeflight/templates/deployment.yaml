@@ -69,15 +69,17 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - 'response=$(wget --spider -S http://localhost:{{ .Values.service.targetPort }}/ 2>&1); echo "$response" | grep -q "HTTP/1.1 [2-4]"'
+                - 'response=$(wget --spider -S http://127.0.0.1:{{ .Values.service.targetPort }}/ 2>&1); echo "$response" | grep -q "HTTP/1.1 [2-4]"'
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 3
             timeoutSeconds: 5
           livenessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.service.targetPort }}
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - 'response=$(wget --spider -S http://127.0.0.1:{{ .Values.service.targetPort }}/ 2>&1); echo "$response" | grep -q "HTTP/1.1 [2-4]"'
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 3
